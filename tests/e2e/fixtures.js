@@ -23,6 +23,22 @@ function startServer() {
   });
 }
 
+// Browsers such as Edge run service workers of their own; pick KeyFlip's.
+const isKeyFlipWorker = (w) => /^chrome-extension:\/\/[a-p]{32}\/src\/background\/service-worker\.js$/.test(w.url());
+
+async function installedWorker(context) {
+  let sw = context.serviceWorkers().find(isKeyFlipWorker);
+  while (!sw) {
+    const w = await context.waitForEvent('serviceworker', { timeout: 30000 });
+    if (isKeyFlipWorker(w)) sw = w;
+  }
+  // Wait for the install handler to write the OS-specific defaults. Right after
+  // start-up some browsers expose the worker before its chrome.* APIs.
+  const installed = () => sw.evaluate(() => chrome.storage.local.get('settings').then((r) => !!(r.settings && r.settings.os))).catch(() => false);
+  await expect.poll(installed, { timeout: 30000 }).toBe(true);
+  return sw;
+}
+
 const test = base.extend({
   // eslint-disable-next-line no-empty-pattern
   server: [async ({}, use) => {
@@ -34,23 +50,15 @@ const test = base.extend({
   // eslint-disable-next-line no-empty-pattern
   context: async ({}, use) => {
     const { context, close } = await launchWithExtension();
+    // Hand the browser over only once KeyFlip is fully installed, so every test
+    // starts from the state a real user has (extension ready before browsing).
+    context.keyflipWorker = await installedWorker(context);
     await use(context);
     await close();
   },
 
   serviceWorker: async ({ context }, use) => {
-    // Browsers such as Edge run service workers of their own; pick KeyFlip's.
-    const ours = (w) => /^chrome-extension:\/\/[a-p]{32}\/src\/background\/service-worker\.js$/.test(w.url());
-    let sw = context.serviceWorkers().find(ours);
-    while (!sw) {
-      const w = await context.waitForEvent('serviceworker', { timeout: 30000 });
-      if (ours(w)) sw = w;
-    }
-    // Wait for the install handler to finish writing the OS-specific defaults.
-    // (Right after start-up some browsers expose the worker before its chrome.* APIs.)
-    const installed = () => sw.evaluate(() => chrome.storage.local.get('settings').then((r) => !!(r.settings && r.settings.os))).catch(() => false);
-    await expect.poll(installed, { timeout: 30000 }).toBe(true);
-    await use(sw);
+    await use(context.keyflipWorker);
   },
 
   extensionId: async ({ serviceWorker }, use) => {

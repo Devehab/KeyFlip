@@ -45,7 +45,7 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Run end-to-end tests
-        run: npm run test:e2e
+        run: npm run test:e2e -- --fail-on-flaky-tests
       - name: Upload report
         if: failure()
         uses: actions/upload-artifact@v4
@@ -106,7 +106,7 @@ jobs:
         env:
           KF_BROWSER: ${{ matrix.browser }}
           HEADED: '1'
-        run: xvfb-run -a npm run test:e2e
+        run: xvfb-run -a npm run test:e2e -- --fail-on-flaky-tests
       - name: Upload report
         if: failure()
         uses: actions/upload-artifact@v4
