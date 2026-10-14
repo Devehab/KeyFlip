@@ -47,7 +47,9 @@ const test = base.extend({
       if (ours(w)) sw = w;
     }
     // Wait for the install handler to finish writing the OS-specific defaults.
-    await expect.poll(() => sw.evaluate(() => chrome.storage.local.get('settings').then((r) => !!(r.settings && r.settings.os)))).toBe(true);
+    // (Right after start-up some browsers expose the worker before its chrome.* APIs.)
+    const installed = () => sw.evaluate(() => chrome.storage.local.get('settings').then((r) => !!(r.settings && r.settings.os))).catch(() => false);
+    await expect.poll(installed, { timeout: 30000 }).toBe(true);
     await use(sw);
   },
 

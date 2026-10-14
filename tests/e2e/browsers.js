@@ -1,7 +1,10 @@
 // Launches a Chromium-family browser with KeyFlip installed.
 //   KF_BROWSER = chromium (default) | chrome | msedge | brave | opera
 //   KF_BROWSER_PATH = optional executable path (brave/opera)
-//   KF_LOAD = flag | cdp   (how the unpacked extension is loaded)
+//   KF_LOAD = flag | cdp | port   (how the browser is driven / extension loaded)
+//     flag: Playwright pipe + --load-extension
+//     cdp:  debugging port + CDP Extensions.loadUnpacked (Google Chrome)
+//     port: debugging port + --load-extension (browsers without pipe support)
 const { chromium } = require('@playwright/test');
 const { spawn } = require('node:child_process');
 const fs = require('node:fs');
@@ -17,7 +20,8 @@ const BROWSERS = {
   // automation is the CDP Extensions.loadUnpacked command.
   chrome: { channel: 'chrome', load: 'cdp', exe: ['/opt/google/chrome/chrome', '/usr/bin/google-chrome'] },
   brave: { load: 'flag', exe: ['/usr/bin/brave-browser', '/opt/brave.com/brave/brave'] },
-  opera: { load: 'flag', exe: ['/usr/bin/opera', '/usr/lib/x86_64-linux-gnu/opera/opera'] },
+  // Opera has no --remote-debugging-pipe support, so it is driven over a port.
+  opera: { load: 'port', exe: ['/usr/bin/opera', '/usr/lib/x86_64-linux-gnu/opera/opera'] },
 };
 
 function which() {
@@ -44,7 +48,7 @@ async function launchWithFlag(b) {
 
 // Starts the browser ourselves with a debugging port, connects over CDP and
 // installs the unpacked extension through Extensions.loadUnpacked.
-async function launchWithCdp(b) {
+async function launchWithCdp(b, viaFlag) {
   const exe = b.exe || chromium.executablePath();
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'keyflip-profile-'));
   const args = [
@@ -55,6 +59,7 @@ async function launchWithCdp(b) {
     '--password-store=basic',
     '--use-mock-keychain',
   ];
+  if (viaFlag) args.push(`--disable-extensions-except=${EXTENSION}`, `--load-extension=${EXTENSION}`);
   if (!process.env.HEADED) args.push('--headless=new');
   // Chromium refuses to start as root with its sandbox (only happens in containers).
   if (typeof process.getuid === 'function' && process.getuid() === 0) args.push('--no-sandbox');
@@ -71,8 +76,10 @@ async function launchWithCdp(b) {
     proc.on('exit', (code) => reject(new Error(`${exe} exited with ${code}\n${buf}`)));
   });
   const browser = await chromium.connectOverCDP(wsUrl);
-  const session = await browser.newBrowserCDPSession();
-  await session.send('Extensions.loadUnpacked', { path: EXTENSION });
+  if (!viaFlag) {
+    const session = await browser.newBrowserCDPSession();
+    await session.send('Extensions.loadUnpacked', { path: EXTENSION });
+  }
   const context = browser.contexts()[0];
   return {
     context,
@@ -90,7 +97,9 @@ async function launchWithCdp(b) {
 
 async function launchWithExtension() {
   const b = which();
-  return b.load === 'cdp' ? launchWithCdp(b) : launchWithFlag(b);
+  if (b.load === 'cdp') return launchWithCdp(b, false);
+  if (b.load === 'port') return launchWithCdp(b, true);
+  return launchWithFlag(b);
 }
 
 module.exports = { launchWithExtension, which, EXTENSION };

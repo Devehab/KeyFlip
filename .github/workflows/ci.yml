@@ -93,7 +93,7 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/opera-browser.gpg] https://deb.opera.com/opera-stable/ stable non-free" | sudo tee /etc/apt/sources.list.d/opera-stable.list
           echo "opera-stable opera-stable/add-deb-source boolean false" | sudo debconf-set-selections
           sudo apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y opera-stable
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y opera-stable gsettings-desktop-schemas
       - name: Browser version
         run: |
           case "${{ matrix.browser }}" in
