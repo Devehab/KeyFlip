@@ -69,8 +69,19 @@ src/content/             in-page logic (shortcut, floating button, chooser, toas
 src/background/          service worker (install flow, right-click menu, stats)
 src/ui/                  popup, settings page, welcome tour
 tests/unit, tests/e2e    node:test and Playwright suites
-store/                   Chrome Web Store kit: listings, screenshots, privacy policy
+store/                   Chrome Web Store kit: listings (8 languages), screenshots, tiles, videos
+docs/                    GitHub Pages site: landing page + privacy policy
 ```
+
+### Publish
+
+- Step-by-step guide with copy-ready answers for every dashboard field: [`store/PUBLISHING-GUIDE.md`](store/PUBLISHING-GUIDE.md)
+- Privacy policy: [`PRIVACY.md`](PRIVACY.md) — served at https://devehab.github.io/KeyFlip/privacy/ once GitHub Pages is enabled (Settings → Pages → Deploy from branch → `/docs`).
+- Regenerate store graphics: `npm run store:assets`, `npm run store:video`, `npm run docs`.
+
+### Tested on
+
+Every push runs lint, store-policy validation, 53 unit tests and 44 end-to-end tests in real **Chromium, Google Chrome, Microsoft Edge, Brave and Opera** (GitHub Actions). A test that only passes on retry fails the build.
 
 ---
 
