@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>New message</title>
+<style>
+  @font-face { font-family: "Readex Pro"; src: url("/assets/fonts/readex-pro-latin-wght-normal.woff2") format("woff2"); font-weight: 160 700; unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: "Readex Pro"; src: url("/assets/fonts/readex-pro-arabic-wght-normal.woff2") format("woff2"); font-weight: 160 700; unicode-range: U+0600-06FF, U+FB50-FDFF, U+FE70-FEFC; }
+  @font-face { font-family: "Rubik"; src: url("/store/assets-src/fonts/rubik-hebrew-wght-normal.woff2") format("woff2"); font-weight: 300 900; unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F; }
+  @font-face { font-family: "Rubik"; src: url("/store/assets-src/fonts/rubik-cyrillic-wght-normal.woff2") format("woff2"); font-weight: 300 900; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+  :root { --line: #e6e4ef; --muted: #74718c; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.5 "Readex Pro", "Rubik", system-ui, "Noto Sans Hebrew", "Noto Sans", sans-serif; color: #1c1a2e; background: #f4f3f9; }
+  .app { display: grid; grid-template-columns: 200px 1fr; min-height: 100vh; }
+  .side { background: #fbfbfe; border-right: 1px solid var(--line); padding: 22px 16px; display: grid; align-content: start; gap: 6px; }
+  .side .new { height: 42px; border-radius: 12px; background: #1c1a2e; color: #fff; display: grid; place-items: center; font-weight: 600; margin-bottom: 14px; }
+  .side .it { height: 36px; border-radius: 10px; display: flex; align-items: center; padding: 0 12px; color: var(--muted); font-weight: 500; }
+  .side .it.on { background: #eceaf6; color: #1c1a2e; }
+  .main { padding: 28px 36px; }
+  .win { background: #fff; border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 20px 50px -24px rgba(40, 30, 100, .25); overflow: hidden; }
+  .win header { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--line); font-weight: 600; }
+  .win header span { margin-inline-start: auto; color: var(--muted); font-weight: 400; font-size: 14px; }
+  .row { display: flex; gap: 12px; align-items: center; padding: 12px 20px; border-bottom: 1px solid var(--line); color: var(--muted); }
+  .row b { width: 64px; font-weight: 500; }
+  .row i { font-style: normal; color: #1c1a2e; }
+  #body { display: block; width: 100%; min-height: 230px; padding: 18px 20px; border: 0; outline: 0; resize: none; font: 500 24px/1.6 "Readex Pro", "Rubik", system-ui, "Noto Sans Hebrew", sans-serif; color: #1c1a2e; unicode-bidi: plaintext; }
+  .bar { display: flex; gap: 10px; padding: 14px 20px; border-top: 1px solid var(--line); }
+  .bar .send { height: 40px; padding: 0 22px; border-radius: 11px; background: #1c1a2e; color: #fff; display: grid; place-items: center; font-weight: 600; }
+  .bar .ghost { height: 40px; width: 40px; border-radius: 11px; background: #f2f1f8; }
+</style>
+</head>
+<body>
+  <div class="app">
+    <aside class="side">
+      <div class="new">+ Compose</div>
+      <div class="it on">Inbox</div><div class="it">Starred</div><div class="it">Sent</div><div class="it">Drafts</div>
+    </aside>
+    <main class="main">
+      <div class="win">
+        <header>New message <span>Draft saved</span></header>
+        <div class="row"><b>To</b><i>sam@example.com</i></div>
+        <div class="row"><b>Subject</b><i id="subject">Tomorrow</i></div>
+        <textarea id="body" spellcheck="false"></textarea>
+        <div class="bar"><div class="send">Send</div><div class="ghost"></div><div class="ghost"></div></div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

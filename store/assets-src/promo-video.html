@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!-- 15-second promo animation. Rendered frame by frame by scripts/build-video.mjs:
+     the page exposes window.setup(copy) and window.render(seconds). -->
+<style>
+  @font-face { font-family: "Cairo"; src: url("fonts/cairo-arabic-wght-normal.woff2") format("woff2"); font-weight: 200 1000; unicode-range: U+0600-06FF, U+FB50-FDFF, U+FE70-FEFC; }
+  @font-face { font-family: "Cairo"; src: url("fonts/cairo-latin-wght-normal.woff2") format("woff2"); font-weight: 200 1000; unicode-range: U+0000-00FF, U+2000-206F, U+2303; }
+  @font-face { font-family: "Plus Jakarta Sans"; src: url("fonts/plus-jakarta-sans-latin-wght-normal.woff2") format("woff2"); font-weight: 200 900; unicode-range: U+0000-00FF, U+2000-206F; }
+  @font-face { font-family: "Rubik"; src: url("fonts/rubik-hebrew-wght-normal.woff2") format("woff2"); font-weight: 300 900; unicode-range: U+0590-05FF; }
+  @font-face { font-family: "Rubik"; src: url("fonts/rubik-cyrillic-wght-normal.woff2") format("woff2"); font-weight: 300 900; unicode-range: U+0400-045F; }
+  @font-face { font-family: "Vazirmatn"; src: url("fonts/vazirmatn-arabic-wght-normal.woff2") format("woff2"); font-weight: 100 900; unicode-range: U+0600-06FF, U+FB50-FDFF; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; }
+  body { font-family: var(--font), "Plus Jakarta Sans", "Cairo", "Rubik", sans-serif; color: #16132e; position: relative;
+    background: radial-gradient(1100px 700px at 90% 0%, rgba(20, 194, 232, .25), transparent 60%),
+      radial-gradient(1100px 760px at 0% 0%, rgba(123, 77, 255, .25), transparent 60%),
+      linear-gradient(165deg, #fbfaff 0%, #f1edff 50%, #e8f8fe 100%); }
+  .abs { position: absolute; }
+  #logo { left: 50%; top: 50%; width: 300px; height: 300px; margin: -150px 0 0 -150px; filter: drop-shadow(0 40px 60px rgba(76, 47, 224, .45)); }
+  #brand { left: 50%; top: 50%; transform: translate(-50%, 190px); font: 800 96px "Plus Jakarta Sans", sans-serif; letter-spacing: -0.03em; white-space: nowrap; }
+  #title { left: 120px; right: 120px; top: 120px; text-align: center; font-size: 76px; font-weight: 800; line-height: 1.2; }
+  #field { left: 50%; top: 380px; width: 1240px; height: 230px; margin-left: -620px; border-radius: 40px; background: #fff;
+    box-shadow: 0 50px 100px -40px rgba(46, 26, 140, .5), 0 4px 16px rgba(23, 21, 43, .06); display: flex; align-items: center; justify-content: center; perspective: 900px; }
+  #gib, #fixed { position: absolute; white-space: nowrap; }
+  #gib { font: 600 78px "DejaVu Sans Mono", monospace; color: #3f3a5c; direction: ltr; }
+  #gib .sel { background: rgba(59, 116, 232, .85); color: #fff; border-radius: 6px; }
+  #gib .caret { display: inline-block; width: 5px; height: 84px; background: #7b4dff; vertical-align: middle; margin-left: 4px; }
+  #squiggle { left: 50%; top: 555px; height: 14px; margin-left: -400px; width: 800px; }
+  #fixed { font-size: 96px; font-weight: 800; color: #16132e; }
+  #keys { left: 50%; top: 680px; display: flex; gap: 26px; align-items: center; transform: translateX(-50%); direction: ltr; }
+  .key { min-width: 180px; height: 170px; padding: 0 40px; border-radius: 42px; display: grid; place-items: center; background: linear-gradient(#fff, #f3f1fb);
+    border: 3px solid #ddd6f5; box-shadow: 0 14px 0 #d3cbf3, 0 40px 60px -26px rgba(46, 26, 140, .55); font: 800 64px "Plus Jakarta Sans", sans-serif; color: #2b2550; }
+  .key.hot { background: linear-gradient(135deg, #7b4dff, #5e5bf6 55%, #14c2e8); color: #fff; border-color: transparent; box-shadow: 0 14px 0 #4a2fc0, 0 40px 60px -24px rgba(76, 47, 224, .7); }
+  .plus { font: 800 60px "Plus Jakarta Sans", sans-serif; color: #a19dbb; }
+  #toast { left: 50%; top: 690px; transform: translateX(-50%); display: flex; align-items: center; gap: 22px; padding: 26px 40px; border-radius: 30px; background: #16132e; color: #fff; font-size: 44px; font-weight: 700; white-space: nowrap; }
+  #toast i { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 20px; background: linear-gradient(135deg, #18b864, #0f8a44); font: 900 36px sans-serif; font-style: normal; }
+  #ways { left: 110px; right: 110px; top: 330px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .way { height: 500px; border-radius: 44px; background: #fff; box-shadow: 0 40px 80px -36px rgba(46, 26, 140, .45); display: grid; grid-template-rows: 250px auto auto; justify-items: center; align-content: start; gap: 18px; text-align: center; padding: 40px 30px; overflow: hidden; }
+  .way .ic { height: 230px; display: grid; place-items: center; }
+  .way b { font-size: 46px; font-weight: 800; line-height: 1.25; }
+  .way small { font-size: 32px; font-weight: 600; color: #6b6787; }
+  .mini { display: flex; gap: 14px; direction: ltr; }
+  .mini span { min-width: 120px; height: 120px; padding: 0 24px; border-radius: 30px; display: grid; place-items: center; background: #fff; border: 3px solid #ddd6f5; box-shadow: 0 10px 0 #d3cbf3; font: 800 44px "Plus Jakarta Sans", sans-serif; }
+  .mini span.hot { background: linear-gradient(135deg, #7b4dff, #14c2e8); color: #fff; border: 0; box-shadow: 0 10px 0 #4a2fc0; }
+  .fab { display: inline-flex; align-items: center; gap: 18px; height: 100px; padding: 0 40px 0 22px; border-radius: 999px; background: #fff; border: 3px solid #e3def5; box-shadow: 0 24px 50px -20px rgba(46, 26, 140, .6); font: 800 44px "Plus Jakarta Sans", "Cairo", sans-serif; }
+  .fab i { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #7b4dff, #14c2e8); display: grid; place-items: center; color: #fff; font-style: normal; font-size: 34px; }
+  .menu { width: 420px; padding: 10px 0; border-radius: 18px; background: #fff; border: 2px solid #dad7e6; box-shadow: 0 30px 60px -24px rgba(23, 21, 43, .45); text-align: start; font-size: 30px; font-weight: 600; }
+  .menu div { height: 54px; display: flex; align-items: center; padding: 0 26px; color: #8a86a3; }
+  .menu div.on { background: #ece7ff; color: #3b22c9; font-weight: 800; }
+  #langs { left: 100px; right: 100px; top: 420px; display: flex; flex-wrap: wrap; justify-content: center; gap: 22px; }
+  #langs span { height: 96px; padding: 0 40px; border-radius: 999px; display: grid; place-items: center; background: #fff; font-size: 48px; font-weight: 800; box-shadow: 0 24px 40px -24px rgba(46, 26, 140, .5); border: 2px solid #ece8f8; }
+  #platforms { left: 0; right: 0; top: 760px; text-align: center; font-size: 44px; font-weight: 700; color: #57536f; }
+  #end { left: 0; right: 0; top: 0; bottom: 0; display: grid; place-items: center; align-content: center; gap: 30px; text-align: center; }
+  #end img { width: 240px; height: 240px; filter: drop-shadow(0 30px 50px rgba(76, 47, 224, .45)); }
+  #end h2 { font: 800 120px "Plus Jakarta Sans", sans-serif; letter-spacing: -0.03em; }
+  #end p { font-size: 54px; font-weight: 700; color: #3c3757; }
+  #end .pills { display: flex; gap: 20px; justify-content: center; }
+  #end .pills span { height: 76px; padding: 0 34px; border-radius: 999px; display: grid; place-items: center; font-size: 34px; font-weight: 800; background: #fff; box-shadow: 0 20px 40px -24px rgba(46, 26, 140, .5); }
+  #end .pills span.g { background: #e3f7ea; color: #0f8a44; }
+  #spark { left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; }
+</style>
+</head>
+<body>
+  <img id="logo" class="abs" src="../../assets/logo/keyflip-logo-512.png">
+  <div id="brand" class="abs">KeyFlip</div>
+  <div id="title" class="abs"></div>
+  <div id="field" class="abs"><span id="gib"></span><span id="fixed"></span></div>
+  <svg id="squiggle" class="abs" viewBox="0 0 800 14" preserveAspectRatio="none"><path d="M0 7 Q 10 0 20 7 T 40 7 T 60 7 T 80 7 T 100 7 T 120 7 T 140 7 T 160 7 T 180 7 T 200 7 T 220 7 T 240 7 T 260 7 T 280 7 T 300 7 T 320 7 T 340 7 T 360 7 T 380 7 T 400 7 T 420 7 T 440 7 T 460 7 T 480 7 T 500 7 T 520 7 T 540 7 T 560 7 T 580 7 T 600 7 T 620 7 T 640 7 T 660 7 T 680 7 T 700 7 T 720 7 T 740 7 T 760 7 T 780 7 T 800 7" fill="none" stroke="#ef4444" stroke-width="4"/></svg>
+  <div id="keys" class="abs"><span class="key" id="k1">Ctrl</span><span class="plus">+</span><span class="key hot" id="k2">Q</span></div>
+  <div id="toast" class="abs"><i>✓</i><span id="toastText"></span></div>
+  <div id="ways" class="abs"></div>
+  <div id="langs" class="abs"></div>
+  <div id="platforms" class="abs"></div>
+  <div id="end" class="abs"><img src="../../assets/logo/keyflip-logo-512.png"><h2>KeyFlip</h2><p id="endTag"></p><div class="pills" id="endPills"></div></div>
+  <canvas id="spark" class="abs" width="1920" height="1080"></canvas>
+<script>
+  const $ = (id) => document.getElementById(id);
+  let C = null;
+
+  const clamp = (x) => Math.max(0, Math.min(1, x));
+  const seg = (t, a, b) => clamp((t - a) / (b - a));
+  const easeOut = (x) => 1 - Math.pow(1 - x, 3);
+  const easeInOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+  const back = (x) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+  const fade = (el, o, y, s) => { el.style.opacity = o; el.style.transform = `${el.dataset.base || ''} translateY(${y || 0}px) scale(${s == null ? 1 : s})`; };
+
+  window.setup = (copy) => {
+    C = copy;
+    document.documentElement.dir = copy.dir;
+    document.body.style.setProperty('--font', `"${copy.font}"`);
+    $('title').textContent = copy.title;
+    $('fixed').textContent = copy.phrase;
+    $('fixed').dir = 'auto';
+    $('toastText').textContent = copy.toast;
+    $('ways').innerHTML = `
+      <div class="way"><div class="ic"><div class="mini"><span>Ctrl</span><span class="hot">Q</span></div></div><b></b><small dir="ltr">Mac: ⌃ Control + Q</small></div>
+      <div class="way"><div class="ic"><span class="fab" dir="${copy.dir}"><i>⇄</i>${copy.fab}</span></div><b></b><small></small></div>
+      <div class="way"><div class="ic"><div class="menu" dir="${copy.dir}"><div>${copy.menu[0]}</div><div>${copy.menu[1]}</div><div class="on">${copy.menu[2]}</div></div></div><b></b><small></small></div>`;
+    const ways = $('ways').querySelectorAll('.way');
+    copy.ways.forEach((w, i) => { ways[i].querySelector('b').textContent = w[0]; if (i) ways[i].querySelector('small').textContent = w[1]; });
+    $('langs').innerHTML = copy.langs.map((l) => `<span dir="auto">${l}</span>`).join('');
+    $('platforms').textContent = copy.platforms;
+    $('endTag').textContent = copy.tagline;
+    $('endPills').innerHTML = copy.pills.map((p, i) => `<span class="${i === 1 ? 'g' : ''}">${p}</span>`).join('');
+    $('brand').dataset.base = 'translate(-50%, 190px)';
+    $('keys').dataset.base = 'translateX(-50%)';
+    $('toast').dataset.base = 'translateX(-50%)';
+  };
+
+  // Sparkles burst when the text flips.
+  const parts = Array.from({ length: 70 }, (_, i) => ({ a: (i / 70) * Math.PI * 2 + (i % 7) * 0.13, v: 300 + (i * 37) % 420, s: 6 + (i * 13) % 12, c: ['#7b4dff', '#14c2e8', '#ffb547', '#ff5c8a', '#18b864'][i % 5] }));
+  function sparks(t) {
+    const g = $('spark').getContext('2d');
+    g.clearRect(0, 0, 1920, 1080);
+    const p = seg(t, 6.0, 7.4);
+    if (p <= 0 || p >= 1) return;
+    for (const q of parts) {
+      const d = easeOut(p) * q.v;
+      g.globalAlpha = 1 - p;
+      g.fillStyle = q.c;
+      g.beginPath();
+      g.arc(960 + Math.cos(q.a) * d * 1.6, 495 + Math.sin(q.a) * d * 0.8, q.s * (1 - p * 0.6), 0, Math.PI * 2);
+      g.fill();
+    }
+    g.globalAlpha = 1;
+  }
+
+  // Timeline (seconds): intro 0–2 · typing 2.3–3.9 · select 4.1–4.6 · keys 4.4–6.9
+  // flip 6.2–6.9 · toast 7.1–8.9 · three ways 9.1–11.2 · languages 11.3–12.9 · end 13–15
+  window.render = (t) => {
+    const intro = seg(t, 0, 0.6);
+    const out1 = seg(t, 1.6, 2.1);
+    fade($('logo'), (1 - out1), 0, back(intro) * (1 - out1 * 0.3));
+    fade($('brand'), seg(t, 0.35, 0.9) * (1 - out1), (1 - easeOut(seg(t, 0.35, 0.9))) * 30);
+
+    const story = seg(t, 2.0, 2.4) * (1 - seg(t, 8.8, 9.2));
+    fade($('title'), story, (1 - easeOut(seg(t, 2.0, 2.4))) * 30);
+    fade($('field'), story, (1 - easeOut(seg(t, 2.1, 2.6))) * 40);
+
+    const g = C.gibberish;
+    const n = Math.round(g.length * seg(t, 2.4, 3.9));
+    const selCount = Math.round(g.length * seg(t, 4.1, 4.6));
+    const typed = g.slice(0, n);
+    const esc = (x) => x.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    $('gib').innerHTML = selCount > 0
+      ? `<span class="sel">${esc(typed.slice(0, selCount))}</span>${esc(typed.slice(selCount))}`
+      : esc(typed) + `<span class="caret" style="opacity:${t < 4.1 && Math.floor(t * 2.4) % 2 === 0 ? 1 : 0}"></span>`;
+    $('squiggle').style.opacity = seg(t, 3.8, 4.1) * (1 - seg(t, 6.1, 6.3)) * story;
+
+    const keysIn = seg(t, 4.4, 4.8) * (1 - seg(t, 6.7, 7.0));
+    const press1 = seg(t, 5.2, 5.32) * (1 - seg(t, 6.0, 6.12));
+    const press2 = seg(t, 5.5, 5.62) * (1 - seg(t, 6.0, 6.12));
+    fade($('keys'), keysIn, (1 - easeOut(seg(t, 4.4, 4.8))) * 60);
+    $('k1').style.transform = `translateY(${press1 * 12}px)`;
+    $('k1').style.boxShadow = press1 > 0.5 ? '0 2px 0 #d3cbf3' : '';
+    $('k2').style.transform = `translateY(${press2 * 12}px)`;
+    $('k2').style.boxShadow = press2 > 0.5 ? '0 2px 0 #4a2fc0' : '';
+
+    const f1 = seg(t, 5.75, 6.05);
+    const f2 = seg(t, 6.05, 6.5);
+    $('gib').style.transform = `rotateX(${easeInOut(f1) * 90}deg)`;
+    $('gib').style.opacity = f1 < 1 ? 1 : 0;
+    $('fixed').style.transform = `rotateX(${(1 - easeOut(f2)) * -90}deg)`;
+    $('fixed').style.opacity = f2 > 0 ? 1 : 0;
+    sparks(t);
+    fade($('toast'), seg(t, 6.9, 7.3) * (1 - seg(t, 8.6, 9.0)), (1 - easeOut(seg(t, 6.9, 7.3))) * 40);
+
+    const w = seg(t, 9.1, 9.5) * (1 - seg(t, 10.9, 11.2));
+    fade($('ways'), w, (1 - easeOut(seg(t, 9.1, 9.5))) * 60);
+    const l = seg(t, 11.3, 11.7) * (1 - seg(t, 12.6, 12.9));
+    fade($('langs'), l, (1 - easeOut(seg(t, 11.3, 11.7))) * 40);
+    fade($('platforms'), l, 0);
+
+    if (t < 9) $('title').textContent = C.title;
+    else if (t < 11.25) { $('title').textContent = C.waysTitle; fade($('title'), w, 0); }
+    else { $('title').textContent = C.langsTitle; fade($('title'), l, 0); }
+
+    const e = seg(t, 12.9, 13.3);
+    fade($('end'), e, (1 - easeOut(e)) * 40, 0.96 + 0.04 * easeOut(e));
+  };
+</script>
+</body>
+</html>

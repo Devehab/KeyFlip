@@ -1,0 +1,90 @@
+{
+  "ar": {
+    "font": "Cairo", "dir": "rtl", "ui": "ar", "layoutB": "ar-101",
+    "phrase": "كيف حالك يا صديقي؟",
+    "supports": ["العربية", "English", "فارسی", "اردو", "עברית", "Français", "Deutsch", "Русский", "Türkçe"],
+    "platforms": "ويندوز · ماك · لينكس · كروم بوك",
+    "s1": { "h": "كتبت والكيبورد على اللغة الغلط؟", "s": "ظلّل النص واضغط Ctrl + Q — يتصلّح فوراً في مكانه.", "before": "قبل", "after": "بعد", "chips": ["بدون مسح", "بدون إعادة كتابة", "بضغطة واحدة"], "mac": "على الماك: ⌃ Control + Q" },
+    "s2": { "h": "كل مفتاح يرجع لحرفه الصحيح", "s": "KeyFlip يعرف أي مفتاح ضغطت، ويكتب الحرف الذي قصدته بلغتك الأخرى.", "typed": "ما كتبته", "meant": "ما قصدته", "supports": "يدعم" },
+    "s3": { "h": "ثلاث طرق للتصحيح", "cards": [["اختصار لوحة المفاتيح", "Ctrl + Q · على الماك ⌃ Control + Q"], ["الزر العائم", "يظهر بجانب النص المظلّل"], ["زر الماوس الأيمن", "اختر «صحّح لغة الكيبورد»"]] },
+    "s4": { "h": "ذكي مع «لا»", "s": "مفتاح B يكتب «لا» — وهي نفسها G ثم H. يختار KeyFlip الكلمة الصحيحة، ويسألك فقط عند الشك." },
+    "s5": { "h": "نصك يبقى على جهازك", "s": "خصوصية كاملة، والوقت الذي توفّره أمام عينيك.", "checks": ["يعمل بدون إنترنت", "بدون حسابات أو تسجيل", "لا يرسل أي نص إلى أي مكان"] }
+  },
+  "en": {
+    "font": "Plus Jakarta Sans", "dir": "ltr", "ui": "en", "layoutB": "ar-101",
+    "phrase": "كيف حالك يا صديقي؟",
+    "supports": ["English", "العربية", "فارسی", "اردو", "עברית", "Français", "Deutsch", "Русский", "Türkçe"],
+    "platforms": "Windows · Mac · Linux · ChromeOS",
+    "s1": { "h": "Typed in the wrong keyboard language?", "s": "Select the text and press Ctrl + Q. It’s fixed in place, instantly.", "before": "Before", "after": "After", "chips": ["No deleting", "No retyping", "One shortcut"], "mac": "Mac: ⌃ Control + Q" },
+    "s2": { "h": "Every key goes back to the letter you meant", "s": "KeyFlip knows which keys you pressed and rewrites them in your other language.", "typed": "You typed", "meant": "You meant", "supports": "Supports" },
+    "s3": { "h": "Three ways to fix it", "cards": [["Keyboard shortcut", "Ctrl + Q · Mac: ⌃ Control + Q"], ["Floating button", "Appears next to selected text"], ["Right-click", "Choose “Fix keyboard layout”"]] },
+    "s4": { "h": "Smart with Arabic “لا”", "s": "The B key types لا — exactly like G then H. KeyFlip picks the right word and only asks when it can’t be sure." },
+    "s5": { "h": "Your text never leaves your device", "s": "Fully private, with the time you save in plain view.", "checks": ["Works offline", "No account, no sign-up", "Sends nothing, anywhere"] }
+  },
+  "fr": {
+    "font": "Plus Jakarta Sans", "dir": "ltr", "ui": "en", "layoutB": "fr-azerty",
+    "phrase": "Bonjour à tous, ça marche très bien !",
+    "supports": ["Français", "English", "Deutsch", "العربية", "فارسی", "עברית", "Русский", "Türkçe"],
+    "platforms": "Windows · Mac · Linux · ChromeOS",
+    "s1": { "h": "Tapé avec la mauvaise langue du clavier ?", "s": "Sélectionnez le texte et appuyez sur Ctrl + Q. Corrigé sur place, instantanément.", "before": "Avant", "after": "Après", "chips": ["Sans effacer", "Sans retaper", "Un seul raccourci"], "mac": "Mac : ⌃ Control + Q" },
+    "s2": { "h": "Chaque touche retrouve la lettre voulue", "s": "KeyFlip sait quelles touches vous avez pressées et les réécrit dans votre autre disposition.", "typed": "Vous avez tapé", "meant": "Vous vouliez", "supports": "Langues" },
+    "s3": { "h": "Trois façons de corriger", "cards": [["Raccourci clavier", "Ctrl + Q · Mac : ⌃ Control + Q"], ["Bouton flottant", "Apparaît à côté du texte sélectionné"], ["Clic droit", "Choisissez « Fix keyboard layout »"]] },
+    "s4": { "h": "Choisissez vos dispositions exactes", "s": "AZERTY, QWERTZ, QWERTY… sur Windows comme sur Mac." },
+    "s5": { "h": "Votre texte ne quitte jamais votre appareil", "s": "Totalement privé, avec le temps gagné bien visible.", "checks": ["Fonctionne hors ligne", "Sans compte ni inscription", "N’envoie rien, nulle part"] }
+  },
+  "de": {
+    "font": "Plus Jakarta Sans", "dir": "ltr", "ui": "en", "layoutB": "de-qwertz",
+    "phrase": "Schöne Grüße aus München!",
+    "supports": ["Deutsch", "English", "Français", "العربية", "فارسی", "עברית", "Русский", "Türkçe"],
+    "platforms": "Windows · Mac · Linux · ChromeOS",
+    "s1": { "h": "Im falschen Tastaturlayout getippt?", "s": "Text markieren und Strg + Q drücken – sofort an Ort und Stelle korrigiert.", "before": "Vorher", "after": "Nachher", "chips": ["Nicht löschen", "Nicht neu tippen", "Ein Tastenkürzel"], "mac": "Mac: ⌃ Control + Q" },
+    "s2": { "h": "Jede Taste bekommt ihren richtigen Buchstaben", "s": "KeyFlip weiß, welche Tasten Sie gedrückt haben, und schreibt sie im anderen Layout neu.", "typed": "Getippt", "meant": "Gemeint", "supports": "Sprachen" },
+    "s3": { "h": "Drei Wege zum Korrigieren", "cards": [["Tastenkürzel", "Strg + Q · Mac: ⌃ Control + Q"], ["Schwebender Button", "Erscheint neben dem markierten Text"], ["Rechtsklick", "„Fix keyboard layout“ wählen"]] },
+    "s4": { "h": "Wählen Sie Ihr genaues Layout", "s": "QWERTZ, AZERTY, QWERTY … unter Windows und Mac." },
+    "s5": { "h": "Ihr Text verlässt nie Ihr Gerät", "s": "Vollständig privat – und Sie sehen, wie viel Zeit Sie sparen.", "checks": ["Funktioniert offline", "Kein Konto, keine Anmeldung", "Sendet nichts, nirgendwohin"] }
+  },
+  "ru": {
+    "font": "Rubik", "dir": "ltr", "ui": "en", "layoutB": "ru",
+    "phrase": "Привет! Как дела?",
+    "supports": ["Русский", "English", "العربية", "فارسی", "עברית", "Français", "Deutsch", "Türkçe"],
+    "platforms": "Windows · Mac · Linux · ChromeOS",
+    "s1": { "h": "Напечатали не в той раскладке?", "s": "Выделите текст и нажмите Ctrl + Q — он исправится прямо на месте.", "before": "До", "after": "После", "chips": ["Без удаления", "Без перепечатки", "Одно сочетание клавиш"], "mac": "Mac: ⌃ Control + Q" },
+    "s2": { "h": "Каждая клавиша возвращает нужную букву", "s": "KeyFlip знает, какие клавиши вы нажали, и переписывает их в другой раскладке.", "typed": "Напечатано", "meant": "Имелось в виду", "supports": "Языки" },
+    "s3": { "h": "Три способа исправить", "cards": [["Сочетание клавиш", "Ctrl + Q · Mac: ⌃ Control + Q"], ["Плавающая кнопка", "Появляется рядом с выделенным текстом"], ["Правый клик", "Выберите «Fix keyboard layout»"]] },
+    "s4": { "h": "Выберите точную раскладку", "s": "ЙЦУКЕН, QWERTY и другие — на Windows и Mac." },
+    "s5": { "h": "Ваш текст не покидает устройство", "s": "Полная конфиденциальность — и сэкономленное время у вас на виду.", "checks": ["Работает офлайн", "Без аккаунта и регистрации", "Ничего никуда не отправляет"] }
+  },
+  "tr": {
+    "font": "Plus Jakarta Sans", "dir": "ltr", "ui": "en", "layoutB": "tr-q",
+    "phrase": "Merhaba, görüşmek üzere!",
+    "supports": ["Türkçe", "English", "العربية", "فارسی", "עברית", "Français", "Deutsch", "Русский"],
+    "platforms": "Windows · Mac · Linux · ChromeOS",
+    "s1": { "h": "Yanlış klavye dilinde mi yazdınız?", "s": "Metni seçip Ctrl + Q’ya basın; anında yerinde düzelir.", "before": "Önce", "after": "Sonra", "chips": ["Silmeden", "Yeniden yazmadan", "Tek kısayolla"], "mac": "Mac: ⌃ Control + Q" },
+    "s2": { "h": "Her tuş kastettiğiniz harfe döner", "s": "KeyFlip hangi tuşlara bastığınızı bilir ve diğer düzende yeniden yazar.", "typed": "Yazdığınız", "meant": "Kastettiğiniz", "supports": "Diller" },
+    "s3": { "h": "Düzeltmenin üç yolu", "cards": [["Klavye kısayolu", "Ctrl + Q · Mac: ⌃ Control + Q"], ["Kayan düğme", "Seçili metnin yanında belirir"], ["Sağ tık", "“Fix keyboard layout” seçin"]] },
+    "s4": { "h": "Tam klavye düzeninizi seçin", "s": "Türkçe Q, QWERTY ve diğerleri — Windows ve Mac’te." },
+    "s5": { "h": "Metniniz cihazınızdan asla çıkmaz", "s": "Tamamen gizli; kazandığınız zaman da gözünüzün önünde.", "checks": ["Çevrimdışı çalışır", "Hesap ya da kayıt yok", "Hiçbir yere bir şey göndermez"] }
+  },
+  "fa": {
+    "font": "Vazirmatn", "dir": "rtl", "ui": "en", "layoutB": "fa",
+    "phrase": "سلام دوست من، خوبی؟",
+    "supports": ["فارسی", "English", "العربية", "اردو", "עברית", "Français", "Deutsch", "Русский", "Türkçe"],
+    "platforms": "ویندوز · مک · لینوکس · کروم‌بوک",
+    "s1": { "h": "با زبان اشتباه صفحه‌کلید تایپ کردید؟", "s": "متن را انتخاب کنید و Ctrl + Q را بزنید؛ همان‌جا فوراً درست می‌شود.", "before": "قبل", "after": "بعد", "chips": ["بدون پاک کردن", "بدون تایپ دوباره", "فقط با یک میان‌بر"], "mac": "مک: ⌃ Control + Q" },
+    "s2": { "h": "هر کلید به حرف درستش برمی‌گردد", "s": "KeyFlip می‌داند کدام کلیدها را زده‌اید و آن‌ها را با زبان دیگرتان دوباره می‌نویسد.", "typed": "تایپ‌شده", "meant": "منظور شما", "supports": "پشتیبانی از" },
+    "s3": { "h": "سه راه برای اصلاح", "cards": [["میان‌بر صفحه‌کلید", "Ctrl + Q · مک: ⌃ Control + Q"], ["دکمهٔ شناور", "کنار متن انتخاب‌شده ظاهر می‌شود"], ["کلیک راست", "«Fix keyboard layout» را انتخاب کنید"]] },
+    "s4": { "h": "چیدمان دقیق خود را انتخاب کنید", "s": "فارسی استاندارد و چیدمان‌های دیگر — در ویندوز و مک." },
+    "s5": { "h": "متن شما از دستگاهتان خارج نمی‌شود", "s": "کاملاً خصوصی، با زمانی که صرفه‌جویی کرده‌اید جلوی چشمتان.", "checks": ["آفلاین کار می‌کند", "بدون حساب و ثبت‌نام", "هیچ چیزی به هیچ جا نمی‌فرستد"] }
+  },
+  "he": {
+    "font": "Rubik", "dir": "rtl", "ui": "en", "layoutB": "he",
+    "phrase": "שלום חבר, מה שלומך?",
+    "supports": ["עברית", "English", "العربية", "فارسی", "Français", "Deutsch", "Русский", "Türkçe"],
+    "platforms": "Windows · Mac · Linux · ChromeOS",
+    "s1": { "h": "הקלדתם בשפת מקלדת שגויה?", "s": "סמנו את הטקסט ולחצו Ctrl + Q — הוא מתוקן מיד, במקום.", "before": "לפני", "after": "אחרי", "chips": ["בלי למחוק", "בלי להקליד מחדש", "בקיצור אחד"], "mac": "Mac: ⌃ Control + Q" },
+    "s2": { "h": "כל מקש חוזר לאות שהתכוונתם אליה", "s": "KeyFlip יודע אילו מקשים לחצתם וכותב אותם מחדש בשפה השנייה שלכם.", "typed": "מה שהוקלד", "meant": "מה שהתכוונתם", "supports": "תומך ב־" },
+    "s3": { "h": "שלוש דרכים לתקן", "cards": [["קיצור מקלדת", "Ctrl + Q · Mac: ⌃ Control + Q"], ["כפתור צף", "מופיע ליד הטקסט המסומן"], ["לחיצה ימנית", "בחרו „Fix keyboard layout”"]] },
+    "s4": { "h": "בחרו את הפריסה המדויקת", "s": "עברית תקנית ופריסות נוספות — ב־Windows וב־Mac." },
+    "s5": { "h": "הטקסט שלכם לא עוזב את המכשיר", "s": "פרטיות מלאה — והזמן שחסכתם מול העיניים.", "checks": ["עובד במצב לא מקוון", "בלי חשבון ובלי הרשמה", "לא שולח שום דבר לשום מקום"] }
+  }
+}
