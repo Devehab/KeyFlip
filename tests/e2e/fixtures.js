@@ -36,6 +36,10 @@ async function installedWorker(context) {
   // start-up some browsers expose the worker before its chrome.* APIs.
   const installed = () => sw.evaluate(() => chrome.storage.local.get('settings').then((r) => !!(r.settings && r.settings.os))).catch(() => false);
   await expect.poll(installed, { timeout: 30000 }).toBe(true);
+  // The install handler then opens the welcome tab; let it appear before tests
+  // open their own pages so it doesn't steal focus from them.
+  const welcome = () => context.pages().some((p) => p.url().includes('/src/ui/onboarding/welcome.html'));
+  await expect.poll(welcome, { timeout: 10000 }).toBe(true);
   return sw;
 }
 
