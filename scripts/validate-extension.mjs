@@ -14,7 +14,7 @@ const manifest = JSON.parse(read('manifest.json'));
 // --- manifest basics
 if (manifest.manifest_version !== 3) fail('manifest_version must be 3');
 if (!/^\d+(\.\d+){0,3}$/.test(manifest.version)) fail(`invalid version "${manifest.version}"`);
-const ALLOWED_PERMISSIONS = new Set(['storage', 'contextMenus', 'activeTab']);
+const ALLOWED_PERMISSIONS = new Set(['storage', 'contextMenus']);
 for (const p of manifest.permissions || []) if (!ALLOWED_PERMISSIONS.has(p)) fail(`unexpected permission "${p}" — justify it before adding`);
 if (manifest.host_permissions) fail('host_permissions are not expected');
 if (manifest.content_security_policy) fail('custom CSP is not expected');

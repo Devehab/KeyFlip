@@ -349,6 +349,10 @@
   on(window, 'blur', () => ui.hideFab());
 
   function onMessage(msg, sender, sendResponse) {
+    if (msg && msg.type === 'keyflip:host') {
+      if (window === window.top) sendResponse({ host: location.hostname || location.protocol.replace(':', '') });
+      return undefined;
+    }
     if (!msg || msg.type !== 'keyflip:flip') return undefined;
     if (msg.requireFocus && !document.hasFocus()) return undefined;
     flip(msg.source || 'message').then((ok) => sendResponse({ ok }));

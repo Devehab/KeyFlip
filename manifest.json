@@ -27,7 +27,7 @@
   "background": {
     "service_worker": "src/background/service-worker.js"
   },
-  "permissions": ["storage", "contextMenus", "activeTab"],
+  "permissions": ["storage", "contextMenus"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

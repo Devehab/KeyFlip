@@ -7,11 +7,14 @@
 
   let host = null;
 
+  // Asks the page's own content script for its hostname, so no tab permission
+  // is needed. Pages where extensions can't run simply don't answer.
   async function currentHost() {
     try {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      const url = new URL(tab && tab.url ? tab.url : '');
-      return /^(https?|file):$/.test(url.protocol) ? (url.hostname || 'file') : null;
+      if (!tab || tab.id === undefined) return null;
+      const res = await chrome.tabs.sendMessage(tab.id, { type: 'keyflip:host' }, { frameId: 0 });
+      return res && res.host && res.host !== 'chrome-extension' ? res.host : null;
     } catch (e) {
       return null;
     }

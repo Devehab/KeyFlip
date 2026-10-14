@@ -165,3 +165,26 @@ test('context menu title is localised and shows the right shortcut', async ({ se
   });
   expect(title.replace(/[\u2066-\u2069]/g, '')).toBe('صحّح لغة الكيبورد (⌃ Control + Q)');
 });
+
+test('popup learns the current site from the page itself (no tab permission)', async ({ context, extensionId, server, storage }) => {
+  await storage.setSettings({ uiLanguage: 'en' });
+  const site = await context.newPage();
+  await site.goto(server.url('page.html'));
+  await site.waitForTimeout(400);
+  // Open the popup in a separate window so the test page stays the active tab.
+  const popup = await context.newPage();
+  await popup.goto(`chrome-extension://${extensionId}/src/ui/popup/popup.html`);
+  // Simulate the toolbar popup: answer for the page's tab.
+  const host = await popup.evaluate(async () => {
+    const tabs = await chrome.tabs.query({});
+    for (const t of tabs) {
+      try {
+        const r = await chrome.tabs.sendMessage(t.id, { type: 'keyflip:host' }, { frameId: 0 });
+        if (r && r.host === '127.0.0.1') return r.host;
+      } catch { /* no content script */ }
+    }
+    return null;
+  });
+  expect(host).toBe('127.0.0.1');
+  await expect(popup.locator('.privacy-line')).toContainText('never leaves');
+});

@@ -50,6 +50,7 @@
       popupQuickHint: 'Paste text typed in the wrong layout…',
       popupQuickEmpty: 'The flipped text appears here',
       popupStatsLink: 'Stats & achievements',
+      popupPrivacy: 'Works offline · your text never leaves this device',
       streakDays: { one: '{n}-day streak', other: '{n}-day streak' },
 
       // Stats
@@ -172,7 +173,7 @@
       browsersLabel: 'Works on',
       browsersBody: 'Google Chrome, Microsoft Edge, Brave, Opera, Vivaldi and other Chromium browsers (Manifest V3).',
       limitsLabel: 'Good to know',
-      limitsBody: 'Browsers don’t let extensions run on internal pages (chrome://, the Web Store) or inside canvas editors such as Google Docs. Use the Quick flip box in the toolbar popup there.',
+      limitsBody: 'Browsers don’t let extensions run on internal browser pages or the extension store, and some online document editors draw text on a canvas instead of a text box. In those places, use the Quick flip box in the toolbar popup.',
       versionLabel: 'Version',
       replayOnboarding: 'Replay the welcome tour',
       resetSettings: 'Reset all settings',
@@ -260,6 +261,7 @@
       popupQuickHint: 'الصق نصاً مكتوباً بلغة الكيبورد الخطأ…',
       popupQuickEmpty: 'سيظهر النص المصحَّح هنا',
       popupStatsLink: 'الإحصائيات والإنجازات',
+      popupPrivacy: 'يعمل بدون إنترنت · نصك لا يغادر جهازك',
       streakDays: { zero: 'لا أيام متتالية', one: 'يوم واحد متتالٍ', two: 'يومان متتاليان', few: '{n} أيام متتالية', many: '{n} يوماً متتالياً', other: '{n} يوم متتالٍ' },
 
       statFlips: 'نصوص تم إنقاذها',
@@ -380,7 +382,7 @@
       browsersLabel: 'يعمل على',
       browsersBody: 'جوجل كروم، مايكروسوفت إيدج، بريف، أوبرا، فيفالدي وباقي متصفحات Chromium (Manifest V3).',
       limitsLabel: 'معلومة مفيدة',
-      limitsBody: 'المتصفحات لا تسمح للإضافات بالعمل على الصفحات الداخلية (chrome:// ومتجر الإضافات) ولا داخل المحررات المرسومة مثل Google Docs. استخدم «قلب سريع» من نافذة الإضافة هناك.',
+      limitsBody: 'المتصفحات لا تسمح للإضافات بالعمل على صفحات المتصفح الداخلية ومتجر الإضافات، وبعض محررات المستندات على الإنترنت ترسم النص بدل استخدام مربع كتابة. في هذه الأماكن استخدم «قلب سريع» من نافذة الإضافة.',
       versionLabel: 'الإصدار',
       replayOnboarding: 'إعادة جولة الترحيب',
       resetSettings: 'إعادة ضبط كل الإعدادات',
