@@ -61,6 +61,19 @@ const test = base.extend({
     await close();
   },
 
+  // On failure, print and attach what KeyFlip saw, plus the pages' console.
+  diagnostics: [async ({ context }, use, testInfo) => {
+    const log = [];
+    context.on('console', (m) => log.push(`${m.type()}: ${m.text()}`));
+    context.on('weberror', (e) => log.push(`error: ${e.error().message}`));
+    await use();
+    if (testInfo.status === testInfo.expectedStatus) return;
+    const state = await diagnose(context).catch((e) => ({ error: String(e) }));
+    const body = JSON.stringify({ state, console: log.slice(-40) }, null, 2);
+    await testInfo.attach('keyflip-diagnostics', { body, contentType: 'application/json' });
+    console.log(`--- KeyFlip diagnostics: ${testInfo.title}\n${body}`);
+  }, { auto: true }],
+
   serviceWorker: async ({ context }, use) => {
     await use(context.keyflipWorker);
   },
@@ -82,10 +95,61 @@ const test = base.extend({
   },
 });
 
+// Asks the extension, which can see its own isolated world, whether KeyFlip's
+// content script is running in every tab showing this page.
+function running(page) {
+  return page.context().keyflipWorker.evaluate(async (url) => {
+    const tabs = (await chrome.tabs.query({})).filter((t) => t.url === url);
+    if (!tabs.length) return false;
+    const results = await Promise.all(tabs.map((t) => chrome.scripting.executeScript({
+      target: { tabId: t.id },
+      func: () => !!globalThis.__keyflipInstance,
+    })));
+    return results.every(([r]) => r.result === true);
+  }, page.url()).catch(() => false);
+}
+
 // Content scripts run at document_idle and read settings asynchronously.
 async function ready(page) {
   await page.waitForLoadState('load');
+  const started = Date.now();
+  await expect.poll(() => running(page), { timeout: 10000, message: `KeyFlip is running in ${page.url()}` }).toBe(true);
+  const waited = Date.now() - started;
+  if (waited > 1000) console.log(`KeyFlip started in ${page.url()} ${waited} ms after load`);
   await page.waitForTimeout(400);
+}
+
+// Everything KeyFlip can see when a test fails: open tabs, whether its content
+// script runs in each frame, focus and selection there, settings, permissions.
+function diagnose(context) {
+  return context.keyflipWorker.evaluate(async () => {
+    const probe = () => {
+      const kf = globalThis.__keyflipInstance;
+      const el = document.activeElement;
+      return {
+        frame: location.href,
+        instance: !!kf,
+        runtime: !!(globalThis.chrome && chrome.runtime && chrome.runtime.id),
+        settings: kf ? { enabled: kf.settings.enabled, shortcut: kf.settings.shortcut, paused: kf.settings.disabledSites } : null,
+        hasFocus: document.hasFocus(),
+        visibility: document.visibilityState,
+        active: el ? el.tagName + (el.id ? `#${el.id}` : '') : null,
+        selection: el && 'selectionStart' in el ? [el.selectionStart, el.selectionEnd] : null,
+      };
+    };
+    const tabs = [];
+    for (const t of await chrome.tabs.query({})) {
+      const row = { id: t.id, url: t.url, active: t.active, status: t.status, window: t.windowId };
+      if (/^https?:/.test(t.url || '')) {
+        try {
+          row.frames = (await chrome.scripting.executeScript({ target: { tabId: t.id, allFrames: true }, func: probe })).map((f) => f.result);
+        } catch (e) { row.error = String((e && e.message) || e); }
+      }
+      tabs.push(row);
+    }
+    const { settings } = await chrome.storage.local.get('settings');
+    return { version: chrome.runtime.getManifest().version, settings, permissions: await chrome.permissions.getAll(), tabs };
+  });
 }
 
 // Settings reach open tabs through storage events.
