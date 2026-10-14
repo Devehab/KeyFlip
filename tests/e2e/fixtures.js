@@ -1,10 +1,10 @@
 // Shared fixtures: a Chromium profile with KeyFlip loaded and a local test site.
-const { test: base, expect, chromium } = require('@playwright/test');
+const { test: base, expect } = require('@playwright/test');
+const { launchWithExtension, EXTENSION } = require('./browsers');
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const EXTENSION = path.join(__dirname, '..', '..');
 const FIXTURES = path.join(__dirname, '..', 'fixtures');
 
 function startServer() {
@@ -33,19 +33,19 @@ const test = base.extend({
 
   // eslint-disable-next-line no-empty-pattern
   context: async ({}, use) => {
-    const context = await chromium.launchPersistentContext('', {
-      channel: 'chromium',
-      headless: !process.env.HEADED,
-      locale: 'en-US',
-      args: [`--disable-extensions-except=${EXTENSION}`, `--load-extension=${EXTENSION}`],
-    });
+    const { context, close } = await launchWithExtension();
     await use(context);
-    await context.close();
+    await close();
   },
 
   serviceWorker: async ({ context }, use) => {
-    let [sw] = context.serviceWorkers();
-    if (!sw) sw = await context.waitForEvent('serviceworker');
+    // Browsers such as Edge run service workers of their own; pick KeyFlip's.
+    const ours = (w) => /^chrome-extension:\/\/[a-p]{32}\/src\/background\/service-worker\.js$/.test(w.url());
+    let sw = context.serviceWorkers().find(ours);
+    while (!sw) {
+      const w = await context.waitForEvent('serviceworker', { timeout: 30000 });
+      if (ours(w)) sw = w;
+    }
     // Wait for the install handler to finish writing the OS-specific defaults.
     await expect.poll(() => sw.evaluate(() => chrome.storage.local.get('settings').then((r) => !!(r.settings && r.settings.os)))).toBe(true);
     await use(sw);

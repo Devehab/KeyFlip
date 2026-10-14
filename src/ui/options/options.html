@@ -31,6 +31,11 @@
     </aside>
 
     <main class="main">
+      <div class="notice access-banner" id="access-banner" hidden>
+        <span class="nic" data-icon="shield"></span>
+        <div><b data-i18n="accessTitle"></b><p data-i18n="accessBody"></p>
+          <button class="btn btn-primary btn-sm" type="button" data-i18n="accessButton"></button></div>
+      </div>
       <!-- General -->
       <section class="panel" id="general">
         <header class="panel-head">
@@ -85,16 +90,16 @@
           <p class="note" id="mac-note"><span data-icon="info"></span><span data-i18n="macNote"></span></p>
         </div>
 
-        <div class="card card-pad stack">
-          <div class="row wrap">
-            <h3 data-i18n="previewTitle"></h3>
-            <div class="spacer"></div>
+        <details class="card keymap" id="keymap">
+          <summary><span data-icon="keyboard" class="ic"></span><b data-i18n="previewTitle"></b></summary>
+          <div class="card-pad stack keymap-body">
+            <p class="muted" data-i18n="previewDesc"></p>
             <label class="row small"><span class="muted" data-i18n="previewShift"></span>
               <span class="switch switch-sm"><input type="checkbox" id="shift"><span></span></span></label>
+            <div id="keyboard"></div>
+            <div class="kb-legend"><span><i></i><b id="legend-a"></b></span><span><i class="b"></i><b id="legend-b"></b></span></div>
           </div>
-          <div id="keyboard"></div>
-          <div class="kb-legend"><span><i></i><b id="legend-a"></b></span><span><i class="b"></i><b id="legend-b"></b></span></div>
-        </div>
+        </details>
 
         <div class="card card-pad stack detect">
           <div>
@@ -195,18 +200,11 @@
         </header>
         <div class="card card-pad stack">
           <div class="kpis kpis-4" id="kpis"></div>
-          <div class="row wrap mini-stats">
-            <span class="chip chip-warn" id="streak"></span>
-            <span class="chip chip-accent" id="amb-count"></span>
-          </div>
+          <p class="muted small" data-i18n="statsHow"></p>
           <div>
             <h3 class="sub" data-i18n="statLast14"></h3>
             <div id="chart"></div>
           </div>
-        </div>
-        <div class="card card-pad stack">
-          <h3 data-i18n="achievementsTitle"></h3>
-          <div id="achievements"></div>
         </div>
         <div class="card card-pad stack share">
           <h3 data-i18n="shareTitle"></h3>

@@ -11,7 +11,7 @@
 .nav a.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
 .nav a.active svg { color: var(--accent); }
 .nav svg { width: 19px; height: 19px; flex: none; }
-.side-card .small { font-size: 12px; }
+.side-card .small, .small { font-size: 12.5px; }
 .side-card { display: grid; gap: 10px; padding: 16px; border-radius: 16px; background: var(--grad-soft); border: 1px solid var(--line); font-size: 13px; }
 
 .main { display: grid; gap: 40px; min-width: 0; }
@@ -32,6 +32,14 @@ h3.sub { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 
 
 .pair { grid-template-columns: 1fr 44px 1fr; }
 .detect .input { font-size: 16px; }
+.detect-result.ok { color: var(--success); }
+.keymap summary { display: flex; align-items: center; gap: 12px; padding: 18px 22px; cursor: pointer; list-style: none; }
+.keymap summary::-webkit-details-marker { display: none; }
+.keymap summary::after { content: ""; margin-inline-start: auto; width: 8px; height: 8px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .2s; }
+.keymap[open] summary::after { transform: rotate(-135deg); }
+.keymap summary .ic { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: var(--accent-soft); color: var(--accent-ink); }
+.keymap summary .ic svg { width: 18px; height: 18px; }
+.keymap-body { padding-top: 0; }
 .detect-result { font-size: 14px; }
 
 .recorder {
@@ -64,7 +72,6 @@ h3.sub { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 
 
 .kpis-4 { grid-template-columns: repeat(3, 1fr); }
 .kpis-4 .kpi b { font-size: 32px; }
-.mini-stats .chip { height: 30px; font-size: 12.5px; }
 .share-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
 .share canvas { width: 100%; height: auto; border-radius: 14px; box-shadow: var(--shadow); }
 .share-text { padding: 12px 14px; border-radius: 12px; background: var(--surface-2); font-size: 13.5px; unicode-bidi: plaintext; }
@@ -81,7 +88,7 @@ h3.sub { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 
   .side { position: static; }
   .nav { grid-auto-flow: column; overflow-x: auto; }
   .nav a span { display: none; }
-  .side-card .small { font-size: 12px; }
+  .side-card .small, .small { font-size: 12.5px; }
 .side-card { display: none; }
   .options-grid, .share-grid, .kpis-4 { grid-template-columns: 1fr; }
   .pair { grid-template-columns: 1fr; }

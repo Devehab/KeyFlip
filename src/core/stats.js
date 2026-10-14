@@ -1,4 +1,4 @@
-// Usage statistics and achievements. Pure functions; storage lives elsewhere.
+// Usage statistics. Pure functions; storage lives elsewhere.
 (function (root, factory) {
   const api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
@@ -57,16 +57,6 @@
     return s;
   }
 
-  // Consecutive days with at least one flip, ending today (or yesterday).
-  function streak(raw, now) {
-    const s = sanitize(raw);
-    const d = new Date(now || Date.now());
-    if (!s.daily[dayKey(d)]) d.setDate(d.getDate() - 1);
-    let n = 0;
-    while (s.daily[dayKey(d)]) { n++; d.setDate(d.getDate() - 1); }
-    return n;
-  }
-
   function lastDays(raw, count, now) {
     const s = sanitize(raw);
     const out = [];
@@ -80,27 +70,9 @@
     return out;
   }
 
-  const ACHIEVEMENTS = [
-    { id: 'first', icon: '🪄', test: (s) => s.flips >= 1 },
-    { id: 'flips10', icon: '🔁', test: (s) => s.flips >= 10 },
-    { id: 'flips100', icon: '💯', test: (s) => s.flips >= 100 },
-    { id: 'flips1000', icon: '🏆', test: (s) => s.flips >= 1000 },
-    { id: 'chars1k', icon: '⌨️', test: (s) => s.chars >= 1000 },
-    { id: 'chars10k', icon: '📚', test: (s) => s.chars >= 10000 },
-    { id: 'hour', icon: '⏳', test: (s) => s.seconds >= 3600 },
-    { id: 'streak7', icon: '🔥', test: (s, st) => st >= 7 },
-    { id: 'lam', icon: '🧩', test: (s) => s.ambiguities >= 10 },
-  ];
-
-  function achievements(raw, now) {
-    const s = sanitize(raw);
-    const st = streak(s, now);
-    return ACHIEVEMENTS.map((a) => ({ id: a.id, icon: a.icon, unlocked: !!a.test(s, st) }));
-  }
-
   function minutes(raw) {
     return Math.round(sanitize(raw).seconds / 60);
   }
 
-  return { empty, dayKey, secondsFor, sanitize, record, streak, lastDays, achievements, minutes, ACHIEVEMENTS };
+  return { empty, dayKey, secondsFor, sanitize, record, lastDays, minutes };
 });

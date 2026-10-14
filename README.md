@@ -51,6 +51,7 @@ npm run validate    # manifest, files, locales, store-policy checks
 npm test            # unit tests (node:test)
 npx playwright install chromium
 npm run test:e2e    # loads the real extension into Chromium and drives it
+KF_BROWSER=msedge npm run test:e2e   # same suite on Edge (also: chrome, brave, opera)
 npm run package     # dist/keyflip-<version>.zip for the Chrome Web Store
 ```
 
@@ -61,7 +62,7 @@ The keyboard tables in `src/core/layouts.data.js` are generated from Unicode CLD
 ### Project layout
 
 ```
-manifest.json            MV3 manifest (permissions: storage, contextMenus, activeTab)
+manifest.json            MV3 manifest (storage, contextMenus, scripting + site access)
 _locales/                store name & summary in 8 languages
 src/core/                conversion engine, layouts, dictionary, settings, stats, i18n
 src/content/             in-page logic (shortcut, floating button, chooser, toast)

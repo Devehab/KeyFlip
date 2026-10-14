@@ -1,5 +1,5 @@
 body { min-height: 100vh; }
-.wrap { max-width: 980px; margin: 0 auto; padding: 24px 24px 40px; display: grid; gap: 18px; min-height: 100vh; grid-template-rows: auto 1fr auto; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 24px 24px 40px; display: grid; gap: 18px; min-height: 100vh; grid-template-rows: auto auto 1fr auto; }
 .bar { display: flex; align-items: center; gap: 16px; }
 .bar .brand { flex: 1; }
 .dots { display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }
@@ -71,6 +71,7 @@ body { min-height: 100vh; }
 .note svg { width: 18px; height: 18px; color: var(--accent); flex: none; margin-top: 2px; }
 .detect { display: grid; gap: 8px; padding: 18px; border-radius: 16px; border: 1.5px dashed var(--line-strong); }
 .detect .input { font-size: 16px; }
+.detect #detect-result.ok { color: var(--success); }
 
 .try { font-size: 22px; min-height: 120px; font-weight: 500; }
 .try-status { display: inline-flex; align-items: center; gap: 10px; color: var(--muted); font-weight: 500; }

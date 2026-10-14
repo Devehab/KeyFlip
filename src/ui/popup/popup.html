@@ -22,6 +22,17 @@
       <button class="icon-btn" id="open-options" data-icon="gear" data-i18n-title="settings" data-i18n-aria-label="settings"></button>
     </header>
 
+    <div class="notice access-banner" id="access-banner" hidden>
+        <span class="nic" data-icon="shield"></span>
+        <div><b data-i18n="accessTitle"></b><p data-i18n="accessBody"></p>
+          <button class="btn btn-primary btn-sm" type="button" data-i18n="accessButton"></button></div>
+      </div>
+
+    <div class="notice danger" id="blocked" hidden>
+      <span class="nic" data-icon="info"></span>
+      <div><b data-i18n="blockedTitle"></b><p data-i18n="blockedBody"></p></div>
+    </div>
+
     <section class="hero card">
       <div class="hero-row">
         <div class="txt">
@@ -57,7 +68,6 @@
       <div class="row">
         <h3 class="label" data-i18n="navStats"></h3>
         <div class="spacer"></div>
-        <span class="chip chip-warn" id="streak" hidden></span>
       </div>
       <div class="kpis" id="kpis"></div>
     </section>

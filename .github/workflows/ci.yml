@@ -32,7 +32,7 @@ jobs:
         run: npm test
 
   e2e:
-    name: End-to-end (real extension in Chromium)
+    name: E2E on Chromium
     runs-on: ubuntu-latest
     needs: checks
     steps:
@@ -56,10 +56,71 @@ jobs:
             test-results/
           retention-days: 7
 
+  cross-browser:
+    name: E2E on ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    needs: checks
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, msedge, brave, opera]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install system dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Install Google Chrome
+        if: matrix.browser == 'chrome'
+        run: npx playwright install --with-deps chrome
+      - name: Install Microsoft Edge
+        if: matrix.browser == 'msedge'
+        run: npx playwright install --with-deps msedge
+      - name: Install Brave
+        if: matrix.browser == 'brave'
+        run: |
+          sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+          sudo apt-get update
+          sudo apt-get install -y brave-browser
+      - name: Install Opera
+        if: matrix.browser == 'opera'
+        run: |
+          curl -fsSL https://deb.opera.com/archive.key | sudo gpg --dearmor -o /usr/share/keyrings/opera-browser.gpg
+          echo "deb [signed-by=/usr/share/keyrings/opera-browser.gpg] https://deb.opera.com/opera-stable/ stable non-free" | sudo tee /etc/apt/sources.list.d/opera-stable.list
+          echo "opera-stable opera-stable/add-deb-source boolean false" | sudo debconf-set-selections
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y opera-stable
+      - name: Browser version
+        run: |
+          case "${{ matrix.browser }}" in
+            chrome) google-chrome --version ;;
+            msedge) microsoft-edge --version ;;
+            brave) brave-browser --version ;;
+            opera) opera --version ;;
+          esac
+      - name: Run end-to-end tests (headed, under Xvfb)
+        env:
+          KF_BROWSER: ${{ matrix.browser }}
+          HEADED: '1'
+        run: xvfb-run -a npm run test:e2e
+      - name: Upload report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
   package:
     name: Build store package
     runs-on: ubuntu-latest
-    needs: [checks, e2e]
+    needs: [checks, e2e, cross-browser]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

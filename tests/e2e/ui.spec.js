@@ -83,14 +83,14 @@ test('popup shows stats, the shortcut and a working quick flip', async ({ contex
   await p.goto(page(extensionId, 'popup/popup.html'));
   await expect(p.locator('#kpis .kpi').nth(1)).toContainText('3');
   await expect(p.locator('#combo')).toContainText('Q');
-  await p.locator('#quick summary').click();
+  await p.locator('#quick').evaluate((d) => { d.open = true; });
   await p.fill('#quick-in', ';dt phg;');
   await expect(p.locator('#quick-text')).toHaveText('كيف حالك');
   await p.locator('#lang button[data-value="ar"]').click();
   await expect(p.locator('html')).toHaveAttribute('dir', 'rtl');
 });
 
-test('statistics page renders KPIs, chart and achievements', async ({ context, extensionId, serviceWorker }) => {
+test('statistics page renders time saved and the 14-day chart', async ({ context, extensionId, serviceWorker }) => {
   await serviceWorker.evaluate(async () => {
     const S = self.KeyFlip.stats;
     let s = S.empty();
@@ -101,8 +101,9 @@ test('statistics page renders KPIs, chart and achievements', async ({ context, e
   await p.goto(page(extensionId, 'options/options.html#stats'));
   await expect(p.locator('#kpis .kpi')).toHaveCount(3);
   await expect(p.locator('#chart .bar')).toHaveCount(14);
-  await expect(p.locator('#achievements .ach:not(.locked)')).toHaveCount(4);
-  await expect(p.locator('#share-text')).toContainText('12');
+  await expect(p.locator('#chart .bar.has')).toHaveCount(1);
+  await expect(p.locator('#kpis .kpi').nth(1)).toContainText('12');
+  await expect(p.locator('#share-text')).toContainText('minutes');
   await expect(p.locator('#share-x')).toHaveAttribute('href', /^https:\/\/x\.com\/intent\/post\?text=/);
 });
 
@@ -187,4 +188,53 @@ test('popup learns the current site from the page itself (no tab permission)', a
   });
   expect(host).toBe('127.0.0.1');
   await expect(popup.locator('.privacy-line')).toContainText('never leaves');
+});
+
+test('if site access is restricted, the user is told and can fix it in one click', async ({ context, extensionId }) => {
+  for (const path of ['popup/popup.html', 'options/options.html', 'onboarding/welcome.html']) {
+    const p = await context.newPage();
+    await p.goto(page(extensionId, path));
+    const banner = p.locator('#access-banner');
+    await expect(banner).toBeHidden();
+    // Simulate access withheld in the browser's extension settings.
+    await p.evaluate(() => {
+      let granted = false;
+      chrome.permissions.contains = async () => granted;
+      chrome.permissions.request = async () => { granted = true; return true; };
+      return window.KeyFlip.page.bindAccessBanner(document.querySelector('#access-banner'));
+    });
+    await expect(banner).toBeVisible();
+    await banner.locator('button').click();
+    await expect(banner).toBeHidden();
+    await p.close();
+  }
+});
+
+test('right-click on a page KeyFlip cannot edit opens the popup with the flipped text', async ({ context, extensionId, serviceWorker, storage }) => {
+  await storage.setSettings({ uiLanguage: 'en' });
+  await serviceWorker.evaluate(() => self.KeyFlipBackground.explainBlocked(';dt phg;'));
+  const p = await context.newPage();
+  await p.goto(page(extensionId, 'popup/popup.html'));
+  await expect(p.locator('#blocked')).toBeVisible();
+  await expect(p.locator('#quick-text')).toHaveText('كيف حالك');
+  // It is shown once.
+  await p.reload();
+  await expect(p.locator('#blocked')).toBeHidden();
+});
+
+test('layout detector: one key with the other keyboard active is enough', async ({ context, extensionId, storage }) => {
+  await storage.setSettings({ uiLanguage: 'en', os: 'win' });
+  const p = await context.newPage();
+  await p.goto(page(extensionId, 'options/options.html#keyboards'));
+  const press = (code, key) => p.locator('#detect-input').evaluate((el, [c, k]) => {
+    el.focus();
+    el.dispatchEvent(new KeyboardEvent('keydown', { code: c, key: k, bubbles: true }));
+  }, [code, key]);
+  // Typing with the first layout (English) is explained, not silently ignored.
+  for (const [c, k] of [['KeyQ', 'q'], ['KeyW', 'w'], ['KeyE', 'e']]) await press(c, k);
+  await expect(p.locator('#detect-result')).toContainText('That is your first layout');
+  // The user switches the keyboard and keeps typing in the same box.
+  for (const [c, k] of [['KeyQ', 'ض'], ['KeyW', 'ص'], ['KeyE', 'ث'], ['KeyR', 'ق']]) await press(c, k);
+  // Letters shared by Windows and Mac Arabic: prefer the layout made for this OS.
+  await expect(p.locator('#detect-result')).toContainText('Arabic (101)');
 });

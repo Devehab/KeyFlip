@@ -3,7 +3,7 @@
   const KF = globalThis.KeyFlip;
   const P = KF.page;
   const { $, $$, t } = P;
-  const { stats: Stats, shortcut: Shortcut, layouts, platform, settings: Settings, i18n } = KF;
+  const { stats: Stats, shortcut: Shortcut, layouts, platform, settings: Settings } = KF;
 
   let recording = false;
 
@@ -51,11 +51,7 @@
   function renderStats(ctx) {
     const s = ctx.stats;
     P.renderKpis($('#kpis'), s);
-    const streak = Stats.streak(s);
-    $('#streak').textContent = '🔥 ' + t('streakDays', { n: streak });
-    $('#amb-count').textContent = `🧩 ${t('statAmbiguities')}: ${i18n.fmt(ctx.lang, s.ambiguities)}`;
     P.renderChart($('#chart'), s);
-    P.renderAchievements($('#achievements'), s);
     $('#share-text').textContent = P.shareText(s);
     const links = P.shareLinks(s);
     $('#share-x').href = links.x;
@@ -137,6 +133,7 @@
   async function main() {
     $('#shift').addEventListener('change', () => renderKeyboards(P.ctx));
     await P.init(render);
+    P.bindAccessBanner($('#access-banner'));
     setupNav();
     setupRecorder();
     P.bindDetector($('#detect-input'), $('#detect-result'), $('#detect-use'));

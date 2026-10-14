@@ -21,15 +21,6 @@ test('time saved scales with typing speed', () => {
   assert.equal(Math.round(Stats.secondsFor(0, 40)), 2);
 });
 
-test('streaks count consecutive days and tolerate today being empty', () => {
-  let s = Stats.empty();
-  for (const d of [1, 2, 3]) s = Stats.record(s, { chars: 5, now: NOW - d * DAY });
-  assert.equal(Stats.streak(s, NOW), 3);
-  s = Stats.record(s, { chars: 5, now: NOW });
-  assert.equal(Stats.streak(s, NOW), 4);
-  assert.equal(Stats.streak(s, NOW + 3 * DAY), 0);
-});
-
 test('lastDays returns a dense series ending today', () => {
   const s = Stats.record(Stats.empty(), { chars: 5, now: NOW - 2 * DAY });
   const days = Stats.lastDays(s, 14, NOW);
@@ -43,17 +34,6 @@ test('old daily entries are trimmed', () => {
   for (let d = 0; d < 150; d++) s = Stats.record(s, { chars: 1, now: NOW - d * DAY });
   assert.equal(Object.keys(s.daily).length, 120);
   assert.equal(s.flips, 150);
-});
-
-test('achievements unlock', () => {
-  let s = Stats.empty();
-  assert.ok(Stats.achievements(s, NOW).every((a) => !a.unlocked));
-  s = Stats.record(s, { chars: 1200, ambiguities: 10, now: NOW });
-  const got = Object.fromEntries(Stats.achievements(s, NOW).map((a) => [a.id, a.unlocked]));
-  assert.equal(got.first, true);
-  assert.equal(got.chars1k, true);
-  assert.equal(got.lam, true);
-  assert.equal(got.flips10, false);
 });
 
 test('sanitize repairs bad data', () => {

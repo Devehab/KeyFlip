@@ -14,9 +14,9 @@ const manifest = JSON.parse(read('manifest.json'));
 // --- manifest basics
 if (manifest.manifest_version !== 3) fail('manifest_version must be 3');
 if (!/^\d+(\.\d+){0,3}$/.test(manifest.version)) fail(`invalid version "${manifest.version}"`);
-const ALLOWED_PERMISSIONS = new Set(['storage', 'contextMenus']);
+const ALLOWED_PERMISSIONS = new Set(['storage', 'contextMenus', 'scripting']);
 for (const p of manifest.permissions || []) if (!ALLOWED_PERMISSIONS.has(p)) fail(`unexpected permission "${p}" — justify it before adding`);
-if (manifest.host_permissions) fail('host_permissions are not expected');
+if (JSON.stringify(manifest.host_permissions) !== JSON.stringify(['<all_urls>'])) fail('host_permissions must be exactly ["<all_urls>"] (used to re-inject into open tabs)');
 if (manifest.content_security_policy) fail('custom CSP is not expected');
 if (manifest.externally_connectable) fail('externally_connectable is not expected');
 if (manifest.web_accessible_resources) fail('web_accessible_resources are not expected');
@@ -63,7 +63,6 @@ const BANNED = [
   [/\bimport\s*\(\s*['"`]https?:/, 'remote import()'],
   [/<script[^>]+src=["']https?:/i, 'remote <script>'],
   [/setTimeout\s*\(\s*['"`]/, 'string setTimeout'],
-  [/chrome\.scripting/, 'chrome.scripting (not in permissions)'],
 ];
 for (const f of JS) {
   const src = read(f);

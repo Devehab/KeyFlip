@@ -3,7 +3,6 @@
   const KF = globalThis.KeyFlip;
   const P = KF.page;
   const { $, t } = P;
-  const { stats: Stats } = KF;
 
   let host = null;
 
@@ -40,9 +39,6 @@
     P.bindPair($('#layout-a'), $('#layout-b'), $('#swap'), null, true);
 
     P.renderKpis($('#kpis'), stats);
-    const streak = Stats.streak(stats);
-    $('#streak').hidden = streak < 2;
-    $('#streak').textContent = '🔥 ' + t('streakDays', { n: streak });
     updateQuick();
   }
 
@@ -54,9 +50,26 @@
     out.textContent = res ? res.text : t('popupQuickEmpty');
   }
 
+  // A right-click on a page KeyFlip can't edit leaves the text here for us.
+  async function showPending() {
+    try {
+      const { pending } = await chrome.storage.session.get('pending');
+      await chrome.storage.session.remove('pending');
+      chrome.action.setBadgeText({ text: '' });
+      if (!pending || Date.now() - pending.at > 120000) return;
+      $('#blocked').hidden = false;
+      $('#quick').open = true;
+      $('#quick-in').value = pending.text;
+      updateQuick();
+    } catch (e) { /* no session storage */ }
+  }
+
   async function main() {
     host = await currentHost();
     await P.init(render);
+    P.bindAccessBanner($('#access-banner'));
+    if (!host) $('#quick').open = true;
+    showPending();
 
     $('#site-enabled').addEventListener('change', async (e) => {
       const list = P.ctx.cfg.disabledSites.filter((h) => h !== host);

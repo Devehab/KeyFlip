@@ -224,26 +224,20 @@
       <div class="kpi"><b>${n(s.chars)}</b><span>${escapeHtml(t('statChars'))}</span></div>`;
   }
 
+  // Minutes saved per day over the last two weeks.
   function renderChart(container, s) {
     const days = Stats.lastDays(s, 14);
-    const max = Math.max(1, ...days.map((d) => d.flips));
+    const max = Math.max(1, ...days.map((d) => d.seconds));
     const today = Stats.dayKey(Date.now());
     const wd = new Intl.DateTimeFormat(ctx.lang === 'ar' ? 'ar-u-nu-latn' : 'en', { weekday: 'narrow' });
+    const full = new Intl.DateTimeFormat(ctx.lang === 'ar' ? 'ar-u-nu-latn' : 'en', { weekday: 'long', day: 'numeric', month: 'short' });
     container.className = 'chart';
     container.innerHTML = days.map((d) => {
-      const h = Math.round((d.flips / max) * 100);
+      const h = Math.round((d.seconds / max) * 100);
       const cls = ['bar', d.flips ? 'has' : '', d.key === today ? 'today' : ''].join(' ');
-      return `<div class="${cls}" title="${escapeHtml(d.key)} · ${d.flips}"><i style="height:${Math.max(4, h)}%"></i><small>${escapeHtml(wd.format(d.date))}</small></div>`;
+      const tip = `${full.format(d.date)} · ${t('chartTip', { minutes: Math.round(d.seconds / 6) / 10, flips: d.flips })}`;
+      return `<div class="${cls}" title="${escapeHtml(tip)}"><i style="height:${Math.max(4, h)}%"></i><small>${escapeHtml(wd.format(d.date))}</small></div>`;
     }).join('');
-  }
-
-  function renderAchievements(container, s) {
-    container.className = 'achievements';
-    container.innerHTML = Stats.achievements(s).map((a) => `
-      <div class="ach ${a.unlocked ? '' : 'locked'}" title="${escapeHtml(a.unlocked ? t('unlocked') : t('locked'))}">
-        <span class="em">${a.icon}</span>
-        <div><b>${escapeHtml(t('ach_' + a.id))}</b><span>${escapeHtml(t('ach_' + a.id + '_d'))}</span></div>
-      </div>`).join('');
   }
 
   // ---------- sharing ----------
@@ -354,41 +348,104 @@
     return { text: r.render(converter.choicesFrom(picks)), from: r.from, to: r.to, changed: r.changed };
   }
 
-  // ---------- layout detection by typing ----------
+  // ---------- website access ----------
+
+  const ALL_SITES = { origins: ['<all_urls>'] };
+
+  async function hasSiteAccess() {
+    try { return await chrome.permissions.contains(ALL_SITES); } catch (e) { return true; }
+  }
+
+  // Shows `banner` when the user restricted KeyFlip's site access, with a
+  // one-click fix (must run from a click, as permissions.request requires).
+  async function bindAccessBanner(banner) {
+    const refresh = async () => { banner.hidden = await hasSiteAccess(); };
+    const btn = banner.querySelector('button');
+    if (btn && !btn.dataset.bound) {
+      btn.dataset.bound = '1';
+      btn.addEventListener('click', async () => {
+        try { await chrome.permissions.request(ALL_SITES); } catch (e) { /* dismissed */ }
+        refresh();
+      });
+    }
+    if (chrome.permissions && chrome.permissions.onAdded && !banner.dataset.listening) {
+      banner.dataset.listening = '1';
+      chrome.permissions.onAdded.addListener(refresh);
+      chrome.permissions.onRemoved.addListener(refresh);
+    }
+    await refresh();
+  }
+
+  // ---------- layout detection ----------
+
+  // Reads the keyboard layout that is active right now. Chrome exposes it through
+  // the Keyboard Map API; typed keys are used to confirm it (and as a fallback).
+  async function activeLayoutMap() {
+    if (!navigator.keyboard || typeof navigator.keyboard.getLayoutMap !== 'function') return null;
+    try {
+      const map = await navigator.keyboard.getLayoutMap();
+      const out = [];
+      for (const code of layouts.CODES) {
+        const key = map.get(code);
+        if (key) out.push({ code, key, shift: false });
+      }
+      return out.length >= 20 ? out : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function rankLayouts(samples) {
+    const os = ctx.os === 'mac' ? 'mac' : 'pc';
+    const pref = (id) => {
+      const meta = layouts.CATALOG.find((l) => l.id === id);
+      return meta.platform === os ? 2 : meta.platform === 'any' ? 1 : 0;
+    };
+    return layouts.matchKeystrokes(samples).sort((a, b) => b.score - a.score || pref(b.id) - pref(a.id));
+  }
 
   function bindDetector(input, resultEl, useBtn, onUse) {
-    let samples = [];
+    let typed = [];
     let best = null;
-    const update = () => {
-      const candidates = layouts.ids.filter((id) => id !== ctx.cfg.layoutA);
-      const ranked = layouts.matchKeystrokes(samples, candidates);
+    const show = (text, ok) => {
+      resultEl.textContent = text;
+      resultEl.classList.toggle('ok', !!ok);
+    };
+    async function update() {
       best = null;
       useBtn.hidden = true;
-      if (samples.length < 4) { resultEl.textContent = samples.length ? t('detectNeedMore') : ''; return; }
-      const top = ranked[0];
-      const second = ranked[1];
-      if (!top || top.score < 0.75 || (second && second.score === top.score)) {
-        resultEl.textContent = top && top.score >= 0.75 ? t('detectNeedMore') : t('detectNoMatch');
-        return;
-      }
+      if (!typed.length) return show('');
+      const map = await activeLayoutMap();
+      // Only the last few keys count, so switching keyboards mid-way just works.
+      const recent = typed.slice(-4);
+      // Trust the full map only when it agrees with what was actually typed.
+      const agrees = map && recent.every((s) => s.shift || map.some((m) => m.code === s.code && m.key === s.key));
+      const samples = agrees ? map : recent;
+      if (!agrees && recent.length < 3) return show(t('detectNeedMore'));
+      const top = rankLayouts(samples)[0];
+      if (!top || top.score < 0.75) return show(t('detectNoMatch'));
+      const name = layouts.name(top.id, ctx.lang);
+      if (top.id === ctx.cfg.layoutA) return show(t('detectIsFirst', { name }));
+      if (top.id === ctx.cfg.layoutB) return show(t('detectAlready', { name }), true);
       best = top.id;
-      resultEl.textContent = t('detectResult', { name: layouts.name(top.id, ctx.lang) });
-      useBtn.hidden = top.id === ctx.cfg.layoutB;
-    };
+      show(t('detectResult', { name }), true);
+      useBtn.hidden = false;
+    }
     input.addEventListener('keydown', (e) => {
       if (e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
-      if (e.key === 'Backspace') { samples.pop(); update(); return; }
-      if (e.key.length > 2) return;
-      samples.push({ code: e.code, key: e.key, shift: e.shiftKey });
-      if (samples.length > 40) samples = samples.slice(-40);
+      if (e.key === 'Backspace') { typed.pop(); update(); return; }
+      if (!e.key || e.key.length > 2) return;
+      typed.push({ code: e.code, key: e.key, shift: e.shiftKey });
+      if (typed.length > 40) typed = typed.slice(-40);
       update();
     });
-    input.addEventListener('input', () => { if (!input.value) { samples = []; update(); } });
+    input.addEventListener('input', () => { if (!input.value) { typed = []; update(); } });
     useBtn.addEventListener('click', async () => {
       if (!best) return;
       await save({ layoutB: best, layoutA: ctx.cfg.layoutA === best ? 'en-us' : ctx.cfg.layoutA });
       toast(t('saved'));
       useBtn.hidden = true;
+      show(t('detectAlready', { name: layouts.name(best, ctx.lang) }), true);
       if (onUse) onUse(best);
     });
   }
@@ -396,7 +453,8 @@
   KF.page = {
     ICONS, STORE_URL, ctx, $, $$, t, init, save, toast, hydrateIcons, escapeHtml,
     bindSwitch, bindSeg, bindPair, fillLayoutSelect, shortcutHtml, selectAllHtml,
-    renderKeyboard, renderKpis, renderChart, renderAchievements,
+    renderKeyboard, renderKpis, renderChart,
     shareText, shareLinks, shareCanvas, downloadShareImage, copy, quickFlip, bindDetector,
+    hasSiteAccess, bindAccessBanner,
   };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

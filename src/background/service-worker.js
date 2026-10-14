@@ -14,7 +14,21 @@ const MENU_ID = 'keyflip-flip';
 
 // ---------- install / update ----------
 
+// Tabs that were open before an install or update have no (or an orphaned)
+// content script. Inject the same files the manifest declares so KeyFlip works
+// there right away, without asking the user to reload every page.
+async function injectIntoOpenTabs() {
+  const files = chrome.runtime.getManifest().content_scripts[0].js;
+  const tabs = await chrome.tabs.query({});
+  const results = await Promise.allSettled(tabs.map((tab) => chrome.scripting.executeScript({
+    target: { tabId: tab.id, allFrames: true },
+    files,
+  })));
+  return results.filter((r) => r.status === 'fulfilled').length;
+}
+
 chrome.runtime.onInstalled.addListener(async (details) => {
+  injectIntoOpenTabs().catch(() => {});
   const info = await chrome.runtime.getPlatformInfo();
   const os = platform.fromRuntime(info.os);
   const current = await Settings.load();
@@ -28,6 +42,12 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 });
 
 chrome.runtime.onStartup.addListener(rebuildMenu);
+
+// Site access granted again (after the user had restricted it): start working
+// in the open tabs straight away.
+chrome.permissions.onAdded.addListener((perms) => {
+  if (perms.origins && perms.origins.length) injectIntoOpenTabs().catch(() => {});
+});
 
 // ---------- context menu ----------
 
@@ -51,15 +71,41 @@ chrome.storage.onChanged.addListener((changes, area) => {
   if (keys.some((k) => JSON.stringify(before[k]) !== JSON.stringify(after[k]))) rebuildMenu();
 });
 
-function sendFlip(tabId, frameId, source) {
+// Sends a flip request; if the tab has no live content script (opened before
+// an update, for example), injects it once and tries again.
+async function sendFlip(tabId, frameId, source) {
   const opts = typeof frameId === 'number' ? { frameId } : undefined;
-  return chrome.tabs.sendMessage(tabId, { type: 'keyflip:flip', source, requireFocus: opts === undefined }, opts)
-    .catch(() => null);
+  const msg = { type: 'keyflip:flip', source, requireFocus: opts === undefined };
+  try {
+    return await chrome.tabs.sendMessage(tabId, msg, opts);
+  } catch (e) {
+    try {
+      const target = opts ? { tabId, frameIds: [frameId] } : { tabId, allFrames: true };
+      await chrome.scripting.executeScript({ target, files: chrome.runtime.getManifest().content_scripts[0].js });
+      return await chrome.tabs.sendMessage(tabId, msg, opts);
+    } catch (err) {
+      return null;
+    }
+  }
 }
 
 async function handleMenuClick(info, tab) {
   if (info.menuItemId !== MENU_ID || !tab || tab.id === undefined) return null;
-  return sendFlip(tab.id, info.frameId, 'menu');
+  const res = await sendFlip(tab.id, info.frameId, 'menu');
+  if (!res) await explainBlocked(info.selectionText || '');
+  return res;
+}
+
+// The page can't be edited (browser pages, the extension store, or site access
+// was restricted by the user). Open the popup with the text already flipped.
+async function explainBlocked(text) {
+  await chrome.storage.session.set({ pending: { text, at: Date.now() } });
+  try {
+    await chrome.action.openPopup();
+  } catch (e) {
+    await chrome.action.setBadgeBackgroundColor({ color: '#e5484d' });
+    await chrome.action.setBadgeText({ text: '!' });
+  }
 }
 
 chrome.contextMenus.onClicked.addListener(handleMenuClick);
@@ -101,4 +147,4 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 });
 
 // Exposed for tests.
-self.KeyFlipBackground = { rebuildMenu, handleMenuClick, recordFlip };
+self.KeyFlipBackground = { rebuildMenu, handleMenuClick, recordFlip, injectIntoOpenTabs, explainBlocked };

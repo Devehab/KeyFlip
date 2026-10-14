@@ -112,6 +112,7 @@
 
   async function main() {
     await P.init(render);
+    P.bindAccessBanner($('#access-banner'));
     $$('.lang-card').forEach((b) => b.addEventListener('click', async () => {
       await P.save({ uiLanguage: b.dataset.lang });
       show(1);

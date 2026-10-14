@@ -274,3 +274,53 @@ test('the confirmation bubble appears in the chosen UI language', async ({ conte
   await page.keyboard.press(flipKeys);
   await expect(page.locator('keyflip-ui .toast')).toContainText('تم قلب 8 أحرف');
 });
+
+test('tabs that were open before install/update are fixed by re-injection', async ({ context, server, serviceWorker }) => {
+  const page = await open(context, server);
+  await page.bringToFront();
+  // Simulate an orphaned content script (what happens to open tabs after an update).
+  await serviceWorker.evaluate(async () => {
+    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    await chrome.scripting.executeScript({ target: { tabId: tab.id, allFrames: true }, func: () => globalThis.__keyflipInstance.destroy() });
+  });
+  await typeAndSelect(page, '#input', ';dt');
+  await page.keyboard.press(flipKeys);
+  await expect(page.locator('#input')).toHaveValue(';dt');
+  // The install/update handler re-injects into every open tab...
+  const injected = await serviceWorker.evaluate(() => self.KeyFlipBackground.injectIntoOpenTabs());
+  expect(injected).toBeGreaterThan(0);
+  await page.waitForTimeout(300);
+  await page.keyboard.press(flipKeys);
+  await expect(page.locator('#input')).toHaveValue('كيف');
+  // ...and injecting twice never makes one key press flip twice.
+  await serviceWorker.evaluate(() => self.KeyFlipBackground.injectIntoOpenTabs());
+  await page.waitForTimeout(300);
+  await page.keyboard.press(flipKeys);
+  await expect(page.locator('#input')).toHaveValue(';dt');
+});
+
+test('works on pages with a strict Trusted Types policy', async ({ context, server }) => {
+  const page = await context.newPage();
+  await page.goto(server.url('trusted-types.html'));
+  await ready(page);
+  await typeAndSelect(page, '#textarea', ';dt phg;');
+  await page.keyboard.press(flipKeys);
+  await expect(page.locator('#textarea')).toHaveValue('كيف حالك');
+  await page.click('#editable');
+  await page.keyboard.insertText('hgsghl');
+  await page.keyboard.press(`${MOD}+KeyA`);
+  await page.keyboard.press(flipKeys);
+  await expect(page.locator('#editable')).toHaveText('السلام');
+});
+
+test('right-click still works in a tab whose content script went missing', async ({ context, server, serviceWorker }) => {
+  const page = await open(context, server);
+  await page.bringToFront();
+  await typeAndSelect(page, '#input', ';dt');
+  await serviceWorker.evaluate(async () => {
+    const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    await chrome.scripting.executeScript({ target: { tabId: tab.id, allFrames: true }, func: () => globalThis.__keyflipInstance.destroy() });
+    return self.KeyFlipBackground.handleMenuClick({ menuItemId: 'keyflip-flip', frameId: 0 }, tab);
+  });
+  await expect(page.locator('#input')).toHaveValue('كيف');
+});
