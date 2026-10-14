@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KeyFlip</title>
+  <link rel="icon" href="../../../assets/icons/icon-32.png">
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="side">
+      <div class="brand">
+        <img src="../../../assets/icons/icon-128.png" alt="">
+        <div><b data-i18n="appName">KeyFlip</b><small data-i18n="settings"></small></div>
+      </div>
+      <nav class="nav" id="nav">
+        <a href="#general" data-icon="gear"><span data-i18n="navGeneral"></span></a>
+        <a href="#keyboards" data-icon="keyboard"><span data-i18n="navKeyboards"></span></a>
+        <a href="#activation" data-icon="bolt"><span data-i18n="navActivation"></span></a>
+        <a href="#smart" data-icon="spark"><span data-i18n="navSmart"></span></a>
+        <a href="#stats" data-icon="trophy"><span data-i18n="navStats"></span></a>
+        <a href="#about" data-icon="shield"><span data-i18n="navAbout"></span></a>
+      </nav>
+      <div class="side-card">
+        <span class="muted" data-i18n="popupHowTo"></span>
+        <span class="combo" id="side-combo"></span>
+        <span class="muted small" data-i18n="popupOrMenu"></span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- General -->
+      <section class="panel" id="general">
+        <header class="panel-head">
+          <h1 data-i18n="generalTitle"></h1>
+          <p class="muted" data-i18n="generalDesc"></p>
+        </header>
+        <div class="card card-pad">
+          <div class="setting">
+            <div class="txt"><b data-i18n="enableLabel"></b><span data-i18n="enableDesc"></span></div>
+            <label class="switch"><input type="checkbox" id="enabled"><span></span></label>
+          </div>
+          <div class="setting">
+            <div class="txt"><b data-i18n="uiLanguageLabel"></b><span data-i18n="uiLanguageDesc"></span></div>
+            <div class="seg" id="ui-language">
+              <button type="button" data-value="auto" data-i18n="langAuto"></button>
+              <button type="button" data-value="ar">العربية</button>
+              <button type="button" data-value="en">English</button>
+            </div>
+          </div>
+          <div class="setting">
+            <div class="txt"><b data-i18n="themeLabel"></b><span data-i18n="themeDesc"></span></div>
+            <div class="seg" id="theme">
+              <button type="button" data-value="auto" data-i18n="themeAuto"></button>
+              <button type="button" data-value="light" data-i18n="themeLight"></button>
+              <button type="button" data-value="dark" data-i18n="themeDark"></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Keyboards -->
+      <section class="panel" id="keyboards">
+        <header class="panel-head">
+          <h1 data-i18n="keyboardsTitle"></h1>
+          <p class="muted" data-i18n="keyboardsDesc"></p>
+        </header>
+        <div class="card card-pad stack">
+          <div class="row wrap">
+            <span class="chip chip-accent" id="os-chip"><span class="dot"></span><span></span></span>
+          </div>
+          <div class="pair">
+            <div>
+              <label for="layout-a" data-i18n="layoutALabel"></label>
+              <div class="select"><select id="layout-a"></select></div>
+            </div>
+            <button class="swap" id="swap" data-icon="swap" data-i18n-title="swap" data-i18n-aria-label="swap"></button>
+            <div>
+              <label for="layout-b" data-i18n="layoutBLabel"></label>
+              <div class="select"><select id="layout-b"></select></div>
+            </div>
+          </div>
+          <p class="note" id="mac-note"><span data-icon="info"></span><span data-i18n="macNote"></span></p>
+        </div>
+
+        <div class="card card-pad stack">
+          <div class="row wrap">
+            <h3 data-i18n="previewTitle"></h3>
+            <div class="spacer"></div>
+            <label class="row small"><span class="muted" data-i18n="previewShift"></span>
+              <span class="switch switch-sm"><input type="checkbox" id="shift"><span></span></span></label>
+          </div>
+          <div id="keyboard"></div>
+          <div class="kb-legend"><span><i></i><b id="legend-a"></b></span><span><i class="b"></i><b id="legend-b"></b></span></div>
+        </div>
+
+        <div class="card card-pad stack detect">
+          <div>
+            <h3 data-i18n="detectTitle"></h3>
+            <p class="muted" data-i18n="detectDesc"></p>
+          </div>
+          <input class="input" id="detect-input" autocomplete="off" spellcheck="false" data-i18n-placeholder="detectPlaceholder" data-keyflip-ignore>
+          <div class="row wrap">
+            <b id="detect-result" class="detect-result"></b>
+            <div class="spacer"></div>
+            <button class="btn btn-primary btn-sm" id="detect-use" hidden data-i18n="detectUse"></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Activation -->
+      <section class="panel" id="activation">
+        <header class="panel-head">
+          <h1 data-i18n="activationTitle"></h1>
+          <p class="muted" data-i18n="activationDesc"></p>
+        </header>
+        <div class="card card-pad">
+          <div class="setting col">
+            <div class="txt"><b data-i18n="shortcutLabel"></b><span id="shortcut-desc"></span></div>
+            <div class="row wrap">
+              <button class="recorder" id="recorder" type="button" data-keyflip-ignore>
+                <span class="combo" id="recorder-combo"></span>
+                <span class="hint" id="recorder-hint" data-i18n="shortcutRecord"></span>
+              </button>
+              <button class="btn btn-ghost btn-sm" id="shortcut-reset" data-i18n="shortcutReset"></button>
+            </div>
+            <p class="warn" id="shortcut-warn" hidden></p>
+          </div>
+          <div class="setting">
+            <div class="txt"><b data-i18n="fabLabel"></b><span data-i18n="fabDesc"></span></div>
+            <label class="switch"><input type="checkbox" id="showFab"><span></span></label>
+          </div>
+          <div class="setting">
+            <div class="txt"><b data-i18n="fabReadOnlyLabel"></b><span data-i18n="fabReadOnlyDesc"></span></div>
+            <label class="switch"><input type="checkbox" id="fabOnReadOnly"><span></span></label>
+          </div>
+          <div class="setting">
+            <div class="txt"><b data-i18n="menuLabel"></b><span data-i18n="menuDesc"></span></div>
+            <label class="switch"><input type="checkbox" id="contextMenu"><span></span></label>
+          </div>
+          <div class="setting">
+            <div class="txt"><b data-i18n="toastLabel"></b><span data-i18n="toastDesc"></span></div>
+            <label class="switch"><input type="checkbox" id="showToast"><span></span></label>
+          </div>
+          <div class="setting">
+            <div class="txt"><b data-i18n="noSelLabel"></b></div>
+            <div class="seg" id="noSelection">
+              <button type="button" data-value="field" data-i18n="noSelField"></button>
+              <button type="button" data-value="word" data-i18n="noSelWord"></button>
+              <button type="button" data-value="none" data-i18n="noSelNone"></button>
+            </div>
+          </div>
+        </div>
+        <div class="card card-pad">
+          <div class="setting col">
+            <div class="txt"><b data-i18n="sitesLabel"></b><span data-i18n="sitesDesc"></span></div>
+            <ul class="sites" id="sites"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Smart handling -->
+      <section class="panel" id="smart">
+        <header class="panel-head">
+          <h1 data-i18n="smartTitle"></h1>
+          <p class="muted" data-i18n="smartDesc"></p>
+        </header>
+        <div class="card card-pad stack">
+          <div class="lam-demo" aria-hidden="true">
+            <span class="kbd kbd-lg">B</span><span class="eq">=</span><span class="lam">لا</span><span class="eq">=</span>
+            <span class="kbd kbd-lg">G</span><span class="plus">+</span><span class="kbd kbd-lg">H</span>
+          </div>
+          <div class="options-grid" id="ambiguity" role="radiogroup">
+            <button type="button" class="opt" data-value="smart"><b data-i18n="ambSmart"></b><span data-i18n="ambSmartDesc"></span></button>
+            <button type="button" class="opt" data-value="ask"><b data-i18n="ambAsk"></b><span data-i18n="ambAskDesc"></span></button>
+            <button type="button" class="opt" data-value="single"><b data-i18n="ambSingle"></b><span data-i18n="ambSingleDesc"></span></button>
+            <button type="button" class="opt" data-value="double"><b data-i18n="ambDouble"></b><span data-i18n="ambDoubleDesc"></span></button>
+          </div>
+        </div>
+        <div class="card card-pad stack">
+          <div>
+            <h3 data-i18n="tryTitle"></h3>
+            <p class="muted" data-i18n="tryDesc"></p>
+          </div>
+          <textarea class="textarea try" id="try" spellcheck="false" data-i18n-placeholder="tryPlaceholder">;dt phg; dh w]drd? </textarea>
+        </div>
+      </section>
+
+      <!-- Stats -->
+      <section class="panel" id="stats">
+        <header class="panel-head">
+          <h1 data-i18n="navStats"></h1>
+        </header>
+        <div class="card card-pad stack">
+          <div class="kpis kpis-4" id="kpis"></div>
+          <div class="row wrap mini-stats">
+            <span class="chip chip-warn" id="streak"></span>
+            <span class="chip chip-accent" id="amb-count"></span>
+          </div>
+          <div>
+            <h3 class="sub" data-i18n="statLast14"></h3>
+            <div id="chart"></div>
+          </div>
+        </div>
+        <div class="card card-pad stack">
+          <h3 data-i18n="achievementsTitle"></h3>
+          <div id="achievements"></div>
+        </div>
+        <div class="card card-pad stack share">
+          <h3 data-i18n="shareTitle"></h3>
+          <div class="share-grid">
+            <canvas id="share-preview" width="1200" height="630"></canvas>
+            <div class="stack">
+              <p class="share-text" id="share-text"></p>
+              <div class="row wrap">
+                <button class="btn btn-primary btn-sm" id="share-copy" data-icon="copy"><span data-i18n="shareCopy"></span></button>
+                <button class="btn btn-secondary btn-sm" id="share-image" data-icon="download"><span data-i18n="shareImage"></span></button>
+              </div>
+              <div class="row wrap">
+                <a class="btn btn-secondary btn-sm" id="share-x" target="_blank" rel="noopener" data-icon="x"><span data-i18n="shareX"></span></a>
+                <a class="btn btn-secondary btn-sm" id="share-wa" target="_blank" rel="noopener" data-icon="whatsapp"><span data-i18n="shareWhatsApp"></span></a>
+                <a class="btn btn-secondary btn-sm" id="share-li" target="_blank" rel="noopener" data-icon="linkedin"><span data-i18n="shareLinkedIn"></span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-pad">
+          <div class="setting col">
+            <div class="txt"><b data-i18n="wpmLabel"></b><span id="wpm-desc"></span></div>
+            <input type="range" id="wpm" min="10" max="120" step="5" class="range">
+          </div>
+          <div class="setting">
+            <div class="txt"><b data-i18n="resetStats"></b></div>
+            <button class="btn btn-danger btn-sm" id="reset-stats" data-i18n="reset"></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- About -->
+      <section class="panel" id="about">
+        <header class="panel-head">
+          <h1 data-i18n="aboutTitle"></h1>
+        </header>
+        <div class="card card-pad privacy">
+          <span class="privacy-ic" data-icon="shield"></span>
+          <div>
+            <h3 data-i18n="privacyHeadline"></h3>
+            <p class="muted" data-i18n="privacyBody"></p>
+          </div>
+        </div>
+        <div class="card card-pad">
+          <div class="setting">
+            <div class="txt"><b data-i18n="browsersLabel"></b><span data-i18n="browsersBody"></span></div>
+          </div>
+          <div class="setting">
+            <div class="txt"><b data-i18n="limitsLabel"></b><span data-i18n="limitsBody"></span></div>
+          </div>
+          <div class="setting">
+            <div class="txt"><b data-i18n="versionLabel"></b><span id="version" class="ltr"></span></div>
+            <a class="btn btn-secondary btn-sm" id="replay" href="../onboarding/welcome.html" data-i18n="replayOnboarding"></a>
+          </div>
+          <div class="setting">
+            <div class="txt"><b data-i18n="resetSettings"></b></div>
+            <button class="btn btn-danger btn-sm" id="reset-settings" data-i18n="reset"></button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../../core/layouts.data.js"></script>
+  <script src="../../core/layouts.js"></script>
+  <script src="../../core/converter.js"></script>
+  <script src="../../core/dictionary.js"></script>
+  <script src="../../core/shortcut.js"></script>
+  <script src="../../core/settings.js"></script>
+  <script src="../../core/stats.js"></script>
+  <script src="../../core/i18n.js"></script>
+  <script src="../../core/platform.js"></script>
+  <script src="../shared/common.js"></script>
+  <script src="../../content/ui.js"></script>
+  <script src="../../content/content.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

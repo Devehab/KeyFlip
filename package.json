@@ -1,0 +1,28 @@
+{
+  "name": "keyflip",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser extension that fixes text typed with the wrong keyboard layout, in place.",
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "validate": "node scripts/validate-extension.mjs",
+    "test": "node --test \"tests/unit/*.test.js\"",
+    "test:e2e": "playwright test",
+    "check": "npm run lint && npm run validate && npm test",
+    "layouts": "node scripts/generate-layouts.mjs",
+    "icons": "node scripts/build-icons.mjs",
+    "store:assets": "node scripts/build-store-assets.mjs",
+    "package": "node scripts/package.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@playwright/test": "1.56.1",
+    "eslint": "9.39.5",
+    "globals": "17.13.0"
+  }
+}

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>KeyFlip test page</title>
+  <style>
+    body { font: 16px/1.5 system-ui, sans-serif; margin: 40px; display: grid; gap: 16px; max-width: 640px; }
+    input, textarea, [contenteditable] { font: inherit; padding: 8px; border: 1px solid #999; border-radius: 6px; }
+    [contenteditable] { min-height: 40px; }
+  </style>
+</head>
+<body>
+  <h1>KeyFlip test page</h1>
+  <input id="input" type="text" autocomplete="off">
+  <input id="search" type="search">
+  <input id="email" type="email">
+  <input id="password" type="password">
+  <input id="readonly" type="text" readonly value=";dt phg;">
+  <textarea id="textarea" rows="3"></textarea>
+  <div id="editable" contenteditable="true"></div>
+  <p id="para">Someone wrote: <span id="gibberish">;dt phg;</span></p>
+  <input id="counted" type="text">
+  <input id="rtl" type="text" dir="rtl">
+  <iframe id="frame" srcdoc="<input id=inner type=text>" style="height:60px"></iframe>
+  <script>
+    window.inputEvents = 0;
+    document.getElementById('counted').addEventListener('input', () => { window.inputEvents += 1; });
+  </script>
+</body>
+</html>

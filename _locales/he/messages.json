@@ -1,0 +1,16 @@
+{
+  "extName": {
+    "message": "KeyFlip — תיקון שפת מקלדת",
+    "description": "Extension name (max 75 characters)"
+  },
+  "extDescription": {
+    "message": "הקלדתם בשפת מקלדת שגויה? סמנו את הג׳יבריש ולחצו Ctrl+Q כדי להפוך אותו לשפה הנכונה. בלי להקליד מחדש.",
+    "description": "Store summary (max 132 characters)"
+  },
+  "actionTitle": {
+    "message": "KeyFlip — תיקון טקסט שהוקלד בפריסה הלא נכונה"
+  },
+  "commandFlip": {
+    "message": "המרת הטקסט המסומן לפריסת המקלדת השנייה"
+  }
+}

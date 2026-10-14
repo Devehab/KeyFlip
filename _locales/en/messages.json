@@ -1,0 +1,16 @@
+{
+  "extName": {
+    "message": "KeyFlip — Wrong Keyboard Layout Fixer",
+    "description": "Extension name (max 75 characters)"
+  },
+  "extDescription": {
+    "message": "Typed in the wrong keyboard language? Select the gibberish and press Ctrl+Q to flip it into the right layout. No retyping.",
+    "description": "Store summary (max 132 characters)"
+  },
+  "actionTitle": {
+    "message": "KeyFlip — flip text typed in the wrong layout"
+  },
+  "commandFlip": {
+    "message": "Flip the selected text to the other keyboard layout"
+  }
+}

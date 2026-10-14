@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KeyFlip</title>
+  <link rel="icon" href="../../../assets/icons/icon-32.png">
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="welcome.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="bar">
+      <div class="brand">
+        <img src="../../../assets/icons/icon-128.png" alt="">
+        <div><b data-i18n="appName">KeyFlip</b></div>
+      </div>
+      <ol class="dots" id="dots" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li></ol>
+      <button class="btn btn-ghost btn-sm" id="skip" data-i18n="skip"></button>
+    </header>
+
+    <main class="stage card">
+      <!-- 0: language -->
+      <section class="step" data-step="0">
+        <div class="center">
+          <img class="logo-xl" src="../../../assets/logo/keyflip-logo-512.png" alt="">
+          <h1 class="title"><span>Choose your language</span><span class="sep">·</span><span dir="rtl">اختر لغتك</span></h1>
+          <p class="muted"><span>You can change it later in Settings.</span> · <span dir="rtl">يمكنك تغييرها لاحقاً من الإعدادات.</span></p>
+          <div class="lang-cards">
+            <button class="lang-card" data-lang="ar" dir="rtl"><span class="big">ع</span><b>العربية</b><small>واجهة باللغة العربية</small></button>
+            <button class="lang-card" data-lang="en"><span class="big">A</span><b>English</b><small>Interface in English</small></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1: intro -->
+      <section class="step" data-step="1" hidden>
+        <div class="split">
+          <div class="copy">
+            <span class="chip chip-accent" data-i18n="appName"></span>
+            <h1 class="title" data-i18n="obIntroTitle"></h1>
+            <p class="lead muted" data-i18n="obIntroBody"></p>
+            <ol class="steps3">
+              <li><span class="n">1</span><span data-i18n="obStep1"></span></li>
+              <li><span class="n">2</span><span><span data-i18n="obStep2"></span><small class="or" data-i18n="obStep2Menu"></small></span></li>
+              <li><span class="n">3</span><span data-i18n="obStep3"></span></li>
+            </ol>
+            <p class="mac-hint mac-only" hidden><span data-icon="info"></span><span data-i18n="macHint"></span></p>
+            <div class="privacy-note" id="privacy-note">
+              <span class="pic" data-icon="shield"></span>
+              <div><b data-i18n="obPrivacyTitle"></b><p class="muted" data-i18n="obPrivacyBody"></p></div>
+            </div>
+          </div>
+          <div class="demo" aria-hidden="true">
+            <div class="demo-field">
+              <span class="demo-text"><span class="from" id="demo-from">;dt phg;</span><span class="to" id="demo-to" dir="rtl">كيف حالك</span></span>
+              <span class="caret"></span>
+            </div>
+            <div class="demo-keys"><span class="kbd kbd-lg" id="demo-mod">Ctrl</span><span class="plus">+</span><span class="kbd kbd-lg">Q</span></div>
+            <div class="demo-badge"><span data-icon="check"></span><span data-i18n="obStep3"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2: keyboards -->
+      <section class="step" data-step="2" hidden>
+        <div class="narrow stack">
+          <div>
+            <span class="chip chip-accent" id="os-chip"><span class="dot"></span><span></span></span>
+            <h1 class="title" data-i18n="obKbTitle"></h1>
+            <p class="muted" data-i18n="obKbBody"></p>
+          </div>
+          <div class="pair">
+            <div>
+              <label for="layout-a" data-i18n="layoutALabel"></label>
+              <div class="select"><select id="layout-a"></select></div>
+            </div>
+            <button class="swap" id="swap" data-icon="swap" data-i18n-title="swap" data-i18n-aria-label="swap"></button>
+            <div>
+              <label for="layout-b" data-i18n="layoutBLabel"></label>
+              <div class="select"><select id="layout-b"></select></div>
+            </div>
+          </div>
+          <p class="note" id="mac-note"><span data-icon="info"></span><span data-i18n="macNote"></span></p>
+          <div class="detect">
+            <b data-i18n="detectTitle"></b>
+            <p class="muted small" data-i18n="detectDesc"></p>
+            <input class="input" id="detect-input" autocomplete="off" spellcheck="false" data-i18n-placeholder="detectPlaceholder" data-keyflip-ignore>
+            <div class="row"><b id="detect-result" class="small"></b><div class="spacer"></div><button class="btn btn-primary btn-sm" id="detect-use" hidden data-i18n="detectUse"></button></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3: try it -->
+      <section class="step" data-step="3" hidden>
+        <div class="narrow stack">
+          <div>
+            <h1 class="title" data-i18n="obTryTitle"></h1>
+            <p class="muted" id="try-body"></p>
+          </div>
+          <textarea class="textarea try" id="try" spellcheck="false"></textarea>
+          <p class="mac-hint mac-only" hidden><span data-icon="info"></span><span data-i18n="macHint"></span></p>
+          <div class="try-status" id="try-status">
+            <span class="pulse"></span><span data-i18n="obTryWaiting"></span>
+          </div>
+          <div class="try-success" id="try-success" hidden>
+            <span class="ok" data-icon="check"></span><b data-i18n="obTrySuccess"></b>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4: done -->
+      <section class="step" data-step="4" hidden>
+        <div class="center">
+          <div class="done-ic" data-icon="check"></div>
+          <h1 class="title" data-i18n="obDoneTitle"></h1>
+          <p class="muted lead" data-i18n="obDoneBody"></p>
+          <div class="tips">
+            <div class="tip-card"><span data-icon="spark"></span><span data-i18n="obPinHint"></span></div>
+            <div class="tip-card"><span data-icon="info"></span><span data-i18n="obReloadHint"></span></div>
+            <div class="tip-card"><span data-icon="keyboard"></span><span class="combo" id="done-combo"></span></div>
+          </div>
+          <div class="row center-row">
+            <a class="btn btn-secondary btn-lg" id="open-settings" href="../options/options.html" data-i18n="obOpenSettings"></a>
+            <button class="btn btn-primary btn-lg" id="finish" data-i18n="obFinish"></button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="nav-row" id="nav-row">
+      <button class="btn btn-ghost" id="back" data-i18n="back"></button>
+      <div class="spacer"></div>
+      <button class="btn btn-primary btn-lg" id="next" data-i18n="next"></button>
+    </footer>
+    <canvas id="confetti" aria-hidden="true"></canvas>
+  </div>
+
+  <script src="../../core/layouts.data.js"></script>
+  <script src="../../core/layouts.js"></script>
+  <script src="../../core/converter.js"></script>
+  <script src="../../core/dictionary.js"></script>
+  <script src="../../core/shortcut.js"></script>
+  <script src="../../core/settings.js"></script>
+  <script src="../../core/stats.js"></script>
+  <script src="../../core/i18n.js"></script>
+  <script src="../../core/platform.js"></script>
+  <script src="../shared/common.js"></script>
+  <script src="../../content/ui.js"></script>
+  <script src="../../content/content.js"></script>
+  <script src="welcome.js"></script>
+</body>
+</html>

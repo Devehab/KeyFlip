@@ -1,0 +1,149 @@
+#!/usr/bin/env node
+// Builds src/core/layouts.data.js from the Unicode CLDR keyboard files in
+// third_party/cldr. Only the base and Shift levels are extracted, keyed by
+// KeyboardEvent.code so that every layout shares the same physical keys.
+//
+//   node scripts/generate-layouts.mjs
+import { readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const cldrDir = join(root, 'third_party', 'cldr');
+
+// ISO key position -> KeyboardEvent.code. C12 (ISO) and D13 (ANSI) are the same
+// "Backslash" key. B00 (ISO-only IntlBackslash) is intentionally skipped because
+// it only duplicates characters found elsewhere.
+const ISO_TO_CODE = {
+  E00: 'Backquote', E01: 'Digit1', E02: 'Digit2', E03: 'Digit3', E04: 'Digit4', E05: 'Digit5',
+  E06: 'Digit6', E07: 'Digit7', E08: 'Digit8', E09: 'Digit9', E10: 'Digit0', E11: 'Minus', E12: 'Equal',
+  D01: 'KeyQ', D02: 'KeyW', D03: 'KeyE', D04: 'KeyR', D05: 'KeyT', D06: 'KeyY', D07: 'KeyU',
+  D08: 'KeyI', D09: 'KeyO', D10: 'KeyP', D11: 'BracketLeft', D12: 'BracketRight', D13: 'Backslash',
+  C01: 'KeyA', C02: 'KeyS', C03: 'KeyD', C04: 'KeyF', C05: 'KeyG', C06: 'KeyH', C07: 'KeyJ',
+  C08: 'KeyK', C09: 'KeyL', C10: 'Semicolon', C11: 'Quote', C12: 'Backslash',
+  B01: 'KeyZ', B02: 'KeyX', B03: 'KeyC', B04: 'KeyV', B05: 'KeyB', B06: 'KeyN', B07: 'KeyM',
+  B08: 'Comma', B09: 'Period', B10: 'Slash',
+};
+
+// id -> CLDR file. Display names live in src/core/layouts.js.
+const SOURCES = {
+  'en-us': 'en-t-k0-windows.xml',
+  'en-gb': 'en-GB-t-k0-windows.xml',
+  'ar-101': 'ar-t-k0-windows.xml',
+  'ar-mac': 'ar-t-k0-osx.xml',
+  'ar-mac-qwerty': 'ar-t-k0-osx-qwerty.xml',
+  'fa': 'fa-t-k0-windows.xml',
+  'fa-mac': 'fa-t-k0-osx.xml',
+  'ur': 'ur-t-k0-windows.xml',
+  'he': 'he-t-k0-windows.xml',
+  'he-mac': 'he-t-k0-osx.xml',
+  'fr-azerty': 'fr-t-k0-windows.xml',
+  'fr-mac': 'fr-t-k0-osx.xml',
+  'de-qwertz': 'de-t-k0-windows.xml',
+  'de-mac': 'de-t-k0-osx.xml',
+  'ru': 'ru-t-k0-windows.xml',
+  'ru-mac': 'ru-t-k0-osx.xml',
+  'tr-q': 'tr-t-k0-windows.xml',
+};
+
+const ENTITIES = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&apos;': "'" };
+
+function decode(value) {
+  return value
+    .replace(/&(amp|lt|gt|quot|apos);/g, (m) => ENTITIES[m])
+    .replace(/\\u\{([0-9a-fA-F]+)\}/g, (_, hex) => String.fromCodePoint(parseInt(hex, 16)));
+}
+
+function attrs(tag) {
+  const out = {};
+  for (const m of tag.matchAll(/(\w+)="([^"]*)"/g)) out[m[1]] = m[2];
+  return out;
+}
+
+// "shift+caps? opt+shift" -> true when one alternative requires exactly Shift.
+function isLevel(modifiers, wanted) {
+  if (modifiers === undefined) return wanted.length === 0;
+  return modifiers.trim().split(/\s+/).some((alt) => {
+    const required = alt.split('+').filter((m) => m && !m.endsWith('?'))
+      .map((m) => m.replace(/[LR]$/, ''));
+    return required.length === wanted.length && wanted.every((w) => required.includes(w));
+  });
+}
+
+function parse(file) {
+  const xml = readFileSync(join(cldrDir, file), 'utf8');
+  const keyMaps = [...xml.matchAll(/<keyMap(\s[^>]*)?>([\s\S]*?)<\/keyMap>/g)].map((m) => ({
+    modifiers: attrs(m[1] || '').modifiers,
+    maps: [...m[2].matchAll(/<map\s[^>]*\/>/g)].map((t) => attrs(t[0])),
+  }));
+  const pick = (wanted) => keyMaps.find((k) => isLevel(k.modifiers, wanted));
+  const base = pick([]);
+  const shift = pick(['shift']);
+  if (!base) throw new Error(`${file}: no base keyMap`);
+
+  // Characters that start a CLDR transform behave as dead keys.
+  const compose = {};
+  for (const t of xml.matchAll(/<transform\s[^>]*\/>/g)) {
+    const { from, to } = attrs(t[0]);
+    const f = decode(from);
+    const chars = [...f];
+    // "^ " -> "^" is just the standalone dead key; keep real compositions only.
+    if (chars.length === 2 && !/\s/.test(chars[1])) compose[f] = decode(to);
+  }
+  const deadChars = new Set(Object.keys(compose).map((k) => [...k][0]));
+
+  const keys = {};
+  const dead = new Set();
+  const fill = (map, level) => {
+    if (!map) return;
+    for (const m of map.maps) {
+      const code = ISO_TO_CODE[m.iso];
+      if (!code || m.to === undefined) continue;
+      const ch = decode(m.to);
+      if (!ch || /\p{Cc}/u.test(ch)) continue;
+      keys[code] ??= [null, null];
+      // C12 and D13 both describe Backslash; keep the first one we see.
+      if (keys[code][level] === null) keys[code][level] = ch;
+      if (deadChars.has(ch) && m.transform !== 'no') dead.add(ch);
+    }
+  };
+  fill(base, 0);
+  fill(shift, 1);
+
+  for (const k of Object.keys(compose)) if (!dead.has([...k][0])) delete compose[k];
+  return { keys, dead: [...dead], compose };
+}
+
+const out = {};
+for (const [id, file] of Object.entries(SOURCES)) {
+  out[id] = parse(file);
+  const n = Object.keys(out[id].keys).length;
+  if (n < 45) throw new Error(`${id}: only ${n} keys parsed`);
+}
+
+const banner = `// GENERATED by scripts/generate-layouts.mjs from Unicode CLDR keyboard data
+// (third_party/cldr, Unicode License). Do not edit by hand.
+// Each key: [base, shift]. null = the layout produces nothing on that level.
+`;
+const CODE_ORDER = [...new Set(Object.values(ISO_TO_CODE))];
+const q = (v) => JSON.stringify(v);
+const lines = [];
+for (const [id, layout] of Object.entries(out)) {
+  lines.push(`    ${q(id)}: {`, '      keys: {');
+  for (const code of CODE_ORDER) {
+    if (layout.keys[code]) lines.push(`        ${code}: ${q(layout.keys[code])},`);
+  }
+  lines.push('      },', `      dead: ${q(layout.dead)},`, `      compose: ${q(layout.compose)},`, '    },');
+}
+const body = `(function (root) {
+  'use strict';
+  const data = {
+${lines.join('\n')}
+  };
+  if (typeof module === 'object' && module.exports) module.exports = data;
+  root.KeyFlip = root.KeyFlip || {};
+  root.KeyFlip.layoutData = data;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+`;
+writeFileSync(join(root, 'src', 'core', 'layouts.data.js'), banner + body);
+console.log(`Wrote ${Object.keys(out).length} layouts.`);

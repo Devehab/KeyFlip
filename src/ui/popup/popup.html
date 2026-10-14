@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KeyFlip</title>
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="popup">
+    <header class="top">
+      <div class="brand">
+        <img src="../../../assets/icons/icon-128.png" alt="">
+        <div><b data-i18n="appName">KeyFlip</b><small id="status-line"></small></div>
+      </div>
+      <div class="spacer"></div>
+      <div class="seg seg-lang" id="lang" role="group" aria-label="Language">
+        <button type="button" data-value="ar">ع</button>
+        <button type="button" data-value="en">EN</button>
+      </div>
+      <button class="icon-btn" id="open-options" data-icon="gear" data-i18n-title="settings" data-i18n-aria-label="settings"></button>
+    </header>
+
+    <section class="hero card">
+      <div class="hero-row">
+        <div class="txt">
+          <b id="enabled-label"></b>
+          <span id="site-label" class="muted"></span>
+        </div>
+        <label class="switch"><input type="checkbox" id="enabled" aria-labelledby="enabled-label"><span></span></label>
+      </div>
+      <div class="hero-row site" id="site-row">
+        <span class="muted" data-i18n="popupSiteToggle"></span>
+        <label class="switch switch-sm"><input type="checkbox" id="site-enabled"><span></span></label>
+      </div>
+      <div class="howto">
+        <div class="howto-row">
+          <span data-i18n="popupHowTo"></span>
+          <span class="combo" id="combo"></span>
+        </div>
+        <span class="or" data-i18n="popupOrMenu"></span>
+        <span class="or mac-only" data-i18n="macHint" hidden></span>
+      </div>
+    </section>
+
+    <section class="card card-pad block">
+      <h3 class="label" data-i18n="popupKeyboards"></h3>
+      <div class="pair">
+        <div class="select"><select id="layout-a" aria-label="Layout A"></select></div>
+        <button class="swap" id="swap" data-icon="swap" data-i18n-title="swap" data-i18n-aria-label="swap"></button>
+        <div class="select"><select id="layout-b" aria-label="Layout B"></select></div>
+      </div>
+    </section>
+
+    <section class="card card-pad block">
+      <div class="row">
+        <h3 class="label" data-i18n="navStats"></h3>
+        <div class="spacer"></div>
+        <span class="chip chip-warn" id="streak" hidden></span>
+      </div>
+      <div class="kpis" id="kpis"></div>
+    </section>
+
+    <details class="card quick" id="quick">
+      <summary><span data-icon="bolt" class="ic"></span><b data-i18n="popupQuick"></b></summary>
+      <div class="quick-body">
+        <textarea class="textarea" id="quick-in" rows="3" data-i18n-placeholder="popupQuickHint" spellcheck="false"></textarea>
+        <div class="quick-out" id="quick-out">
+          <p id="quick-text" class="muted" data-i18n="popupQuickEmpty"></p>
+          <button class="btn btn-secondary btn-sm" id="quick-copy" data-icon="copy" hidden><span data-i18n="copy"></span></button>
+        </div>
+      </div>
+    </details>
+
+    <footer class="foot">
+      <a href="#" id="open-stats" data-icon="trophy"><span data-i18n="popupStatsLink"></span></a>
+      <a href="#" id="open-settings" data-icon="gear"><span data-i18n="settings"></span></a>
+    </footer>
+  </main>
+
+  <script src="../../core/layouts.data.js"></script>
+  <script src="../../core/layouts.js"></script>
+  <script src="../../core/converter.js"></script>
+  <script src="../../core/dictionary.js"></script>
+  <script src="../../core/shortcut.js"></script>
+  <script src="../../core/settings.js"></script>
+  <script src="../../core/stats.js"></script>
+  <script src="../../core/i18n.js"></script>
+  <script src="../../core/platform.js"></script>
+  <script src="../shared/common.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

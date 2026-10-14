@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extName__",
+  "short_name": "KeyFlip",
+  "description": "__MSG_extDescription__",
+  "version": "1.0.0",
+  "default_locale": "en",
+  "minimum_chrome_version": "110",
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "32": "assets/icons/icon-32.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
+  },
+  "action": {
+    "default_popup": "src/ui/popup/popup.html",
+    "default_title": "__MSG_actionTitle__",
+    "default_icon": {
+      "16": "assets/icons/icon-16.png",
+      "32": "assets/icons/icon-32.png"
+    }
+  },
+  "options_ui": {
+    "page": "src/ui/options/options.html",
+    "open_in_tab": true
+  },
+  "background": {
+    "service_worker": "src/background/service-worker.js"
+  },
+  "permissions": ["storage", "contextMenus", "activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "src/core/layouts.data.js",
+        "src/core/layouts.js",
+        "src/core/converter.js",
+        "src/core/dictionary.js",
+        "src/core/shortcut.js",
+        "src/core/settings.js",
+        "src/core/i18n.js",
+        "src/core/platform.js",
+        "src/content/ui.js",
+        "src/content/content.js"
+      ],
+      "all_frames": true,
+      "match_about_blank": true,
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "flip-selection": {
+      "description": "__MSG_commandFlip__"
+    }
+  }
+}

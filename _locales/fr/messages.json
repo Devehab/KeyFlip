@@ -1,0 +1,16 @@
+{
+  "extName": {
+    "message": "KeyFlip — Correcteur de disposition clavier",
+    "description": "Extension name (max 75 characters)"
+  },
+  "extDescription": {
+    "message": "Tapé avec la mauvaise langue du clavier ? Sélectionnez le charabia et appuyez sur Ctrl+Q pour le corriger. Sans tout retaper.",
+    "description": "Store summary (max 132 characters)"
+  },
+  "actionTitle": {
+    "message": "KeyFlip — corriger un texte tapé avec la mauvaise disposition"
+  },
+  "commandFlip": {
+    "message": "Convertir le texte sélectionné vers l’autre disposition du clavier"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "extName": {
+    "message": "KeyFlip — اصلاح زبان صفحه‌کلید",
+    "description": "Extension name (max 75 characters)"
+  },
+  "extDescription": {
+    "message": "با زبان اشتباه صفحه‌کلید تایپ کردید؟ متن را انتخاب کنید و Ctrl+Q را بزنید تا فوراً درست شود. بدون تایپ دوباره.",
+    "description": "Store summary (max 132 characters)"
+  },
+  "actionTitle": {
+    "message": "KeyFlip — اصلاح متنی که با زبان اشتباه تایپ شده"
+  },
+  "commandFlip": {
+    "message": "تبدیل متن انتخاب‌شده به چیدمان دیگر صفحه‌کلید"
+  }
+}

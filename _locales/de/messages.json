@@ -1,0 +1,16 @@
+{
+  "extName": {
+    "message": "KeyFlip — Falsches Tastaturlayout korrigieren",
+    "description": "Extension name (max 75 characters)"
+  },
+  "extDescription": {
+    "message": "Im falschen Tastaturlayout getippt? Text markieren, Strg+Q drücken – und er erscheint im richtigen Layout. Ohne Neutippen.",
+    "description": "Store summary (max 132 characters)"
+  },
+  "actionTitle": {
+    "message": "KeyFlip — im falschen Layout getippten Text umwandeln"
+  },
+  "commandFlip": {
+    "message": "Markierten Text in das andere Tastaturlayout umwandeln"
+  }
+}

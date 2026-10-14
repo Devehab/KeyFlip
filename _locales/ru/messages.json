@@ -1,0 +1,16 @@
+{
+  "extName": {
+    "message": "KeyFlip — исправление раскладки клавиатуры",
+    "description": "Extension name (max 75 characters)"
+  },
+  "extDescription": {
+    "message": "Напечатали не в той раскладке? Выделите «абракадабру» и нажмите Ctrl+Q — текст сразу станет правильным. Без перепечатки.",
+    "description": "Store summary (max 132 characters)"
+  },
+  "actionTitle": {
+    "message": "KeyFlip — исправить текст, набранный не в той раскладке"
+  },
+  "commandFlip": {
+    "message": "Перевести выделенный текст в другую раскладку"
+  }
+}

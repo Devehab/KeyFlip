@@ -1,0 +1,16 @@
+{
+  "extName": {
+    "message": "KeyFlip — مصحح لغة الكيبورد",
+    "description": "Extension name (max 75 characters)"
+  },
+  "extDescription": {
+    "message": "كتبت والكيبورد على اللغة الخطأ؟ ظلّل النص واضغط Ctrl+Q ليتحول فوراً إلى اللغة الصحيحة، بدون إعادة كتابة.",
+    "description": "Store summary (max 132 characters)"
+  },
+  "actionTitle": {
+    "message": "KeyFlip — اقلب النص المكتوب بلغة الكيبورد الخطأ"
+  },
+  "commandFlip": {
+    "message": "اقلب النص المظلّل إلى تخطيط الكيبورد الآخر"
+  }
+}

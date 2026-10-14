@@ -1,0 +1,16 @@
+{
+  "extName": {
+    "message": "KeyFlip — Yanlış Klavye Düzeni Düzeltici",
+    "description": "Extension name (max 75 characters)"
+  },
+  "extDescription": {
+    "message": "Yanlış klavye dilinde mi yazdınız? Metni seçip Ctrl+Q’ya basın, doğru düzene anında dönsün. Yeniden yazmaya gerek yok.",
+    "description": "Store summary (max 132 characters)"
+  },
+  "actionTitle": {
+    "message": "KeyFlip — yanlış düzende yazılan metni çevir"
+  },
+  "commandFlip": {
+    "message": "Seçili metni diğer klavye düzenine çevir"
+  }
+}
