@@ -202,7 +202,7 @@ The extension makes no network requests.
 1. انسخ رابط الإضافة في المتجر.
 2. ضعه في المكانين التاليين ثم ارفع تحديثاً (رقم إصدار أعلى في `manifest.json`، مثل `1.0.1`):
    - `src/ui/shared/common.js` ← `const STORE_URL = '...';` (ليظهر الرابط في رسالة المشاركة).
-   - `scripts/build-docs.mjs` ← زر «Get KeyFlip» ثم شغّل `npm run docs`.
+   - `scripts/build-docs.mjs` ← `const STORE_URL = '...';` ثم شغّل `npm run docs` وارفع مجلد `docs/` (تتحول كل أزرار الموقع من «النسخة المبكرة» إلى «أضِفها إلى Chrome»).
 3. اطلب من الناس **تقييماً صادقاً**. ممنوع منعاً باتاً تقديم أي مقابل للتقييم أو ربط ميزة بالتقييم (مخالفة Yellow Nickel).
 
 ---

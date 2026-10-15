@@ -70,14 +70,16 @@ src/background/          service worker (install flow, right-click menu, stats)
 src/ui/                  popup, settings page, welcome tour
 tests/unit, tests/e2e    node:test and Playwright suites
 store/                   Chrome Web Store kit: listings (8 languages), screenshots, tiles, videos
-docs/                    GitHub Pages site: landing page + privacy policy
+website/                 landing page sources (copy in English & Arabic, styles, live demo)
+docs/                    built GitHub Pages site (npm run docs): landing page, privacy policy
 ```
 
 ### Publish
 
 - Step-by-step guide with copy-ready answers for every dashboard field: [`store/PUBLISHING-GUIDE.md`](store/PUBLISHING-GUIDE.md)
-- Privacy policy: [`PRIVACY.md`](PRIVACY.md) — served at https://devehab.github.io/KeyFlip/privacy/ once GitHub Pages is enabled (Settings → Pages → Deploy from branch → `/docs`).
-- Regenerate store graphics: `npm run store:assets`, `npm run store:video`, `npm run docs`.
+- Website: https://devehab.github.io/KeyFlip/ (Arabic: https://devehab.github.io/KeyFlip/ar/), served by GitHub Pages from `/docs`. Edit `website/`, then run `npm run docs` (needs ffmpeg; uses Playwright for the social preview images). The live demo on the page runs the extension's own engine from `src/core`.
+- Privacy policy: [`PRIVACY.md`](PRIVACY.md) — served at https://devehab.github.io/KeyFlip/privacy/.
+- Regenerate store graphics: `npm run store:assets`, `npm run store:video`.
 
 ### Tested on
 

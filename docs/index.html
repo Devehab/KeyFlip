@@ -1,59 +1,282 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr" data-page="home">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KeyFlip — Wrong Keyboard Layout Fixer</title>
-<meta name="description" content="Typed in the wrong keyboard language? Select the text and press Ctrl+Q. KeyFlip fixes it in place — no retyping.">
-<link rel="icon" href="assets/icon-128.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
-<style>
-:root { --bg: #f7f5ff; --card: #fff; --text: #16132e; --muted: #5d5976; --line: #e8e4f6; --accent: #5b33f2; }
-@media (prefers-color-scheme: dark) { :root { --bg: #0e0d19; --card: #17162a; --text: #f2f0ff; --muted: #a5a2c4; --line: #2a2748; --accent: #a894ff; } }
-* { box-sizing: border-box; }
-body { margin: 0; font: 17px/1.7 "Inter", "Cairo", system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--text);
-  background: radial-gradient(900px 500px at 100% 0, rgba(20,194,232,.14), transparent 60%), radial-gradient(900px 500px at 0 0, rgba(123,77,255,.16), transparent 60%), var(--bg); }
-[lang="ar"], [dir="rtl"] { font-family: "Cairo", "Inter", system-ui, sans-serif; }
-a { color: var(--accent); }
-header { max-width: 880px; margin: 0 auto; padding: 32px 20px 0; display: flex; align-items: center; gap: 12px; }
-header img { width: 44px; height: 44px; }
-header b { font-size: 22px; letter-spacing: -.02em; }
-header nav { margin-inline-start: auto; display: flex; gap: 8px; }
-header nav button, header nav a { font: inherit; font-size: 14px; font-weight: 700; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; text-decoration: none; }
-header nav button[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: transparent; }
-main { max-width: 880px; margin: 24px auto 64px; padding: 36px 40px; background: var(--card); border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 30px 60px -36px rgba(46,26,140,.35); }
-@media (max-width: 640px) { main { padding: 24px 18px; margin: 16px 12px 40px; } }
-h1 { font-size: 34px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -.02em; }
-.date { color: var(--muted); margin: 0 0 24px; }
-h2 { display: none; }
-h3 { font-size: 20px; margin: 28px 0 6px; }
-ul { padding-inline-start: 22px; }
-li { margin: 4px 0; }
-code { font-size: 14px; background: rgba(123,77,255,.10); padding: 1px 6px; border-radius: 6px; }
-section[hidden] { display: none; }
-.hero { text-align: center; padding: 56px 20px 24px; }
-.hero img { width: 120px; height: 120px; filter: drop-shadow(0 20px 30px rgba(108,71,255,.35)); }
-.hero h1 { font-size: 52px; margin: 18px 0 6px; }
-.hero p { font-size: 22px; color: var(--muted); margin: 4px 0; }
-.demo { display: inline-flex; gap: 14px; align-items: center; margin: 24px 0; font-size: 26px; font-weight: 800; }
-.demo span { padding: 10px 18px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); }
-.demo .g { font-family: ui-monospace, monospace; color: var(--muted); text-decoration: line-through; }
-.links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 12px 0 40px; }
-.links a { padding: 12px 22px; border-radius: 14px; font-weight: 800; text-decoration: none; background: var(--card); border: 1px solid var(--line); color: var(--text); }
-.links a.primary { background: linear-gradient(135deg, #7b4dff, #14c2e8); color: #fff; border: 0; }
-footer { text-align: center; color: var(--muted); font-size: 14px; padding: 0 20px 40px; }</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>KeyFlip — Fix text typed in the wrong keyboard language</title>
+<meta name="description" content="Typed a whole sentence with the wrong keyboard layout? Select it and press Ctrl+Q. KeyFlip turns ;dt phg; into كيف حالك right where you typed it. Free, private, works offline.">
+<link rel="canonical" href="https://devehab.github.io/KeyFlip/">
+<link rel="alternate" hreflang="en" href="https://devehab.github.io/KeyFlip/">
+<link rel="alternate" hreflang="ar" href="https://devehab.github.io/KeyFlip/ar/">
+<link rel="alternate" hreflang="x-default" href="https://devehab.github.io/KeyFlip/">
+<meta name="theme-color" content="#6a3dff">
+<meta name="color-scheme" content="light dark">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="KeyFlip">
+<meta property="og:title" content="KeyFlip — Fix text typed in the wrong keyboard language">
+<meta property="og:description" content="Typed a whole sentence with the wrong keyboard layout? Select it and press Ctrl+Q. KeyFlip turns ;dt phg; into كيف حالك right where you typed it. Free, private, works offline.">
+<meta property="og:url" content="https://devehab.github.io/KeyFlip/">
+<meta property="og:image" content="https://devehab.github.io/KeyFlip/assets/og-en.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="KeyFlip turns ;dt phg; into كيف حالك with one shortcut.">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<link rel="icon" type="image/png" sizes="128x128" href="assets/icon-128.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="preload" href="assets/fonts/jakarta-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/early.js"></script>
 </head>
-<body>
-<div class="hero">
-  <img src="assets/logo-512.png" alt="KeyFlip logo">
-  <h1>KeyFlip</h1>
-  <p>Typed in the wrong keyboard language? Flip it — don’t retype it.</p>
-  <p dir="rtl" lang="ar">كتبت والكيبورد على اللغة الغلط؟ اقلب النص بدل ما تعيد كتابته.</p>
-  <div class="demo" dir="ltr"><span class="g">;dt phg;</span>⇄<span dir="rtl">كيف حالك</span></div>
-  <div class="links">
-    <a class="primary" id="store" href="https://github.com/Devehab/KeyFlip">Get KeyFlip</a>
-    <a href="privacy/">Privacy · الخصوصية</a>
-    <a href="https://github.com/Devehab/KeyFlip/issues">Support · الدعم</a>
+<body class="lang-en">
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav" id="top">
+  <div class="wrap nav-in">
+    <a class="brand" href="" aria-label="KeyFlip"><img src="assets/logo.svg" width="36" height="36" alt=""><span>KeyFlip</span></a>
+    <nav class="nav-links" aria-label="Page sections">
+      <a href="#how">How it works</a>
+      <a href="#try">Try it</a>
+      <a href="#features">Features</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-tools">
+      <a class="lang-switch" href="ar/" hreflang="ar" lang="ar" data-set-lang="ar" aria-label="اقرأ هذه الصفحة بالعربية">العربية</a>
+      <button class="icon-btn theme-toggle" type="button" aria-label="Switch light or dark theme" title="Switch light or dark theme"><svg class="ic i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="ic i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
+      <a class="btn primary sm nav-cta" href="#install">Get early access</a>
+    </div>
   </div>
-</div>
-<footer>Works offline · your text never leaves your device · يعمل بدون إنترنت ونصك لا يغادر جهازك</footer>
+</header>
+<main id="main">
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="grid"></span></div>
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <p class="eyebrow"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 13.9 8l4.6 1.9-4.6 1.9L12 16.3l-1.9-4.5L5.5 9.9 10.1 8z"/><path d="M19 15v4M17 17h4M5 3v3M3.5 4.5h3"/></svg>Free browser extension</p>
+      <h1>Typed in the wrong keyboard language? <span class="grad">Flip it.</span></h1>
+      <p class="lead">Select the gibberish and press <span class="combo " data-combo="flip" dir="ltr"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>Q</kbd></span>. KeyFlip rewrites it with the right keyboard, right where you typed it — no deleting, no retyping.</p>
+      <div class="hero-cta">
+        <a class="btn primary lg" href="#install"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></svg>Get early access</a>
+        <a class="btn ghost lg" href="#try">Try it live<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+      </div>
+      <ul class="trust"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Works offline</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Collects no data</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Arabic & English interface</li></ul>
+      <p class="browsers"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg>Works in Chrome, Edge, Brave and Opera</p>
+    </div>
+    <div class="hero-demo">
+      <div class="demo" id="demo" role="img" aria-label="Animation: text typed with the wrong keyboard is selected, Ctrl+Q is pressed, and KeyFlip rewrites it in the right language." data-examples="[{&quot;from&quot;:&quot;;dt phg;&quot;,&quot;to&quot;:&quot;كيف حالك&quot;,&quot;fromDir&quot;:&quot;ltr&quot;,&quot;toDir&quot;:&quot;rtl&quot;},{&quot;from&quot;:&quot;اثممخ صخقمي&quot;,&quot;to&quot;:&quot;hello world&quot;,&quot;fromDir&quot;:&quot;rtl&quot;,&quot;toDir&quot;:&quot;ltr&quot;},{&quot;from&quot;:&quot;hgsghl ugd;l&quot;,&quot;to&quot;:&quot;السلام عليكم&quot;,&quot;fromDir&quot;:&quot;ltr&quot;,&quot;toDir&quot;:&quot;rtl&quot;},{&quot;from&quot;:&quot;ghbdtn&quot;,&quot;to&quot;:&quot;привет&quot;,&quot;fromDir&quot;:&quot;ltr&quot;,&quot;toDir&quot;:&quot;ltr&quot;}]" data-toast-forms="{&quot;one&quot;:&quot;Flipped {n} character&quot;,&quot;other&quot;:&quot;Flipped {n} characters&quot;}" data-lang="en" data-typed="You typed" data-fixed="KeyFlip fixed it">
+        <div class="win" aria-hidden="true">
+          <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span><span class="win-title">New message</span></div>
+          <div class="win-row"><span class="lbl">To</span><span dir="ltr">sam@example.com</span></div>
+          <div class="win-row"><span class="lbl">Subject</span><span>Tomorrow</span></div>
+          <div class="win-body">
+            <p class="state" id="demo-state">KeyFlip fixed it</p>
+            <div class="field"><span class="txt" id="demo-text" dir="rtl">كيف حالك</span><span class="caret"></span></div>
+          </div>
+          <div class="demo-keys"><span class="combo big" data-combo="flip" dir="ltr"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>Q</kbd></span></div>
+          <div class="toast show" id="demo-toast"><span class="t-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4 3 8l4 4"/><path d="M3 8h14"/><path d="m17 20 4-4-4-4"/><path d="M21 16H7"/></svg></span><span id="demo-toast-msg">Flipped 8 characters</span><small><span class="combo " data-combo="undo" dir="ltr"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>Z</kbd></span> to undo</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section" id="how">
+  <div class="wrap">
+    <div class="head center"><p class="kicker">Three ways to flip</p><h2>Fix it the way your hands already move</h2></div>
+    <div class="ways">
+      <article class="way reveal">
+        <div class="vis vis-keys"><span class="combo huge" data-combo="flip" dir="ltr"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>Q</kbd></span></div>
+        <div class="way-txt"><span class="num">1</span><h3>Keyboard shortcut</h3><p>Select the text and press <span class="combo " data-combo="flip" dir="ltr"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>Q</kbd></span>. Nothing selected? KeyFlip fixes the whole text box.</p><p class="note">On a Mac it’s <b>⌃ Control + Q</b> — because ⌘ Q quits the browser.</p></div>
+      </article>
+      <article class="way reveal">
+        <div class="vis vis-fab">
+          <p class="line" dir="ltr"><mark>;dt phg;</mark></p>
+          <span class="fab"><span class="fab-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4 3 8l4 4"/><path d="M3 8h14"/><path d="m17 20 4-4-4-4"/><path d="M21 16H7"/></svg></span><b>Flip</b><span class="fab-dir" dir="ltr">EN → ع</span></span>
+        </div>
+        <div class="way-txt"><span class="num">2</span><h3>Floating button</h3><p>Select text that looks wrong and a small button appears with a preview of the fix. One click and it’s done.</p></div>
+      </article>
+      <article class="way reveal">
+        <div class="vis vis-menu">
+          <div class="menu-wrap" aria-hidden="true">
+            <ul class="menu"><li>Copy</li><li>Paste</li><li class="sep"></li><li class="on"><img src="assets/icon-16.png" width="16" height="16" alt="">Fix keyboard layout<span class="dim" dir="ltr" data-combo-text="flip">(Ctrl+Q)</span></li></ul>
+            <svg class="cursor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 4 7.07 17 2.51-7.39L21 11.07z"/></svg>
+          </div>
+        </div>
+        <div class="way-txt"><span class="num">3</span><h3>Right-click menu</h3><p>Prefer the mouse? Right-click the text and choose <b>Fix keyboard layout</b>.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+<section class="section alt" id="try">
+  <div class="wrap">
+    <div class="head center"><p class="kicker">Try it right here</p><h2>See it work before you install</h2><p class="sub">Type or paste text written with the wrong keyboard, then press <span class="combo " data-combo="flip" dir="ltr"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>Q</kbd></span> or <b>Flip</b>. This is the same engine as the extension, running on your device.</p></div>
+    <div class="play card reveal" id="play" data-lang="en" data-strings="{&quot;detected&quot;:&quot;Flipped from {from} to {to}&quot;,&quot;nothing&quot;:&quot;Nothing to flip — this already looks right.&quot;,&quot;empty&quot;:&quot;Type or paste some text first.&quot;,&quot;choose&quot;:&quot;This word can be read two ways. Pick the one you meant:&quot;,&quot;auto&quot;:&quot;Picked automatically&quot;}">
+      <div class="play-top">
+        <span class="play-lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 13h.01M18 13h.01M10 13h4M8 16h8"/></svg>Your keyboards</span>
+        <div class="pair">
+          <select id="kb-a" aria-label="Your keyboards 1"><optgroup label="English"><option value="en-us" selected>English (US)</option><option value="en-gb">English (UK)</option></optgroup><optgroup label="Arabic"><option value="ar-101">Arabic (101)</option><option value="ar-mac">Arabic (Mac)</option><option value="ar-mac-qwerty">Arabic QWERTY</option></optgroup><optgroup label="Persian"><option value="fa">Persian · Windows</option><option value="fa-mac">Persian · Mac</option></optgroup><optgroup label="Urdu"><option value="ur">Urdu · Windows</option></optgroup><optgroup label="Hebrew"><option value="he">Hebrew · Windows</option><option value="he-mac">Hebrew · Mac</option></optgroup><optgroup label="French"><option value="fr-azerty">French · AZERTY</option><option value="fr-mac">French · AZERTY (Mac)</option></optgroup><optgroup label="German"><option value="de-qwertz">German · QWERTZ</option><option value="de-mac">German · QWERTZ (Mac)</option></optgroup><optgroup label="Russian"><option value="ru">Russian · ЙЦУКЕН</option><option value="ru-mac">Russian · ЙЦУКЕН (Mac)</option></optgroup><optgroup label="Turkish"><option value="tr-q">Turkish · Q</option></optgroup></select>
+          <button class="icon-btn" id="kb-swap" type="button" aria-label="Swap keyboards" title="Swap keyboards"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4 3 8l4 4"/><path d="M3 8h14"/><path d="m17 20 4-4-4-4"/><path d="M21 16H7"/></svg></button>
+          <select id="kb-b" aria-label="Your keyboards 2"><optgroup label="English"><option value="en-us">English (US)</option><option value="en-gb">English (UK)</option></optgroup><optgroup label="Arabic"><option value="ar-101" selected>Arabic (101)</option><option value="ar-mac">Arabic (Mac)</option><option value="ar-mac-qwerty">Arabic QWERTY</option></optgroup><optgroup label="Persian"><option value="fa">Persian · Windows</option><option value="fa-mac">Persian · Mac</option></optgroup><optgroup label="Urdu"><option value="ur">Urdu · Windows</option></optgroup><optgroup label="Hebrew"><option value="he">Hebrew · Windows</option><option value="he-mac">Hebrew · Mac</option></optgroup><optgroup label="French"><option value="fr-azerty">French · AZERTY</option><option value="fr-mac">French · AZERTY (Mac)</option></optgroup><optgroup label="German"><option value="de-qwertz">German · QWERTZ</option><option value="de-mac">German · QWERTZ (Mac)</option></optgroup><optgroup label="Russian"><option value="ru">Russian · ЙЦУКЕН</option><option value="ru-mac">Russian · ЙЦУКЕН (Mac)</option></optgroup><optgroup label="Turkish"><option value="tr-q">Turkish · Q</option></optgroup></select>
+        </div>
+      </div>
+      <label class="sr-only" for="play-text">Text to fix</label>
+      <textarea id="play-text" dir="auto" rows="3" spellcheck="false" autocomplete="off" data-keyflip-ignore>;dt phg;? ljn kgjrd hgd,l</textarea>
+      <div class="play-actions">
+        <button class="btn primary" id="play-flip" type="button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4 3 8l4 4"/><path d="M3 8h14"/><path d="m17 20 4-4-4-4"/><path d="M21 16H7"/></svg>Flip<span class="hint-combo"><span class="combo sm" data-combo="flip" dir="ltr"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>Q</kbd></span></span></button>
+        <button class="btn ghost" id="play-reset" type="button">Reset</button>
+        <p class="play-status" id="play-status" role="status" aria-live="polite"></p>
+      </div>
+      <div class="play-amb" id="play-amb" hidden></div>
+      <div class="play-samples"><span class="lbl">Examples</span><button type="button" class="chip on" data-text=";dt phg;? ljn kgjrd hgd,l" data-a="en-us" data-b="ar-101">Arabic typed on English</button><button type="button" class="chip" data-text="أثممخ! ٍثث غخع شف خىث" data-a="en-us" data-b="ar-101">English typed on Arabic</button><button type="button" class="chip" data-text="غخع شقث قهلاف" data-a="en-us" data-b="ar-101">The لا puzzle</button><button type="button" class="chip" data-text="ghbdtn rfr ltkf" data-a="en-us" data-b="ru">Russian</button><button type="button" class="chip" data-text="akuo' nv akunl" data-a="en-us" data-b="he">Hebrew</button></div>
+      <p class="play-hint">Tip: select part of the text to flip only that part.</p>
+    </div>
+  </div>
+</section>
+<section class="section ">
+  <div class="wrap spot">
+    <div class="spot-txt reveal">
+      <p class="kicker">Smart, not just fast</p><h2>It even knows what you meant by لا</h2><p class="sub">On the Arabic keyboard, لا has its own key (<kbd>B</kbd>) — but you can also type it as ل then ا (<kbd>G</kbd> <kbd>H</kbd>). So “قهلاف” could be <i>ribt</i> or <i>right</i>. KeyFlip checks a word list and picks the real word. When it can’t be sure, it asks — with a live preview.</p>
+      <ul class="ticks"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Picks the real word automatically</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Asks only when it truly can’t tell</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Choose with the arrow keys, a number or a click</li></ul>
+    </div>
+    <div class="spot-media reveal"><figure class="shot glow"><img src="assets/img/dialog-en.webp" width="912" height="612" loading="lazy" decoding="async" alt="KeyFlip asking which word you meant: ribt or right, with a live preview."></figure></div>
+  </div>
+</section>
+<section class="section alt">
+  <div class="wrap spot flip">
+    <div class="spot-txt reveal">
+      <p class="kicker">Windows or Mac</p><h2>Your Mac’s Arabic keyboard is different. KeyFlip knows.</h2><p class="sub">The Arabic layout on a Mac doesn’t match Windows: many letters sit on different keys. KeyFlip detects your system and picks the right keyboard. Not sure which one you use? Press a single key in the setup and it finds out.</p>
+      
+    </div>
+    <div class="spot-media reveal"><div class="kb-compare card">
+  <p class="kb-cap">Same keys, different letters</p>
+  <div class="krow k-win"><span class="kname">Windows</span><div class="keys" dir="ltr"><span class="key"><small>V</small><b dir="rtl">ر</b></span><span class="key"><small>B</small><b dir="rtl">لا</b></span><span class="key"><small>N</small><b dir="rtl">ى</b></span><span class="key"><small>M</small><b dir="rtl">ة</b></span></div></div>
+  <div class="krow k-mac"><span class="kname">Mac</span><div class="keys" dir="ltr"><span class="key"><small>V</small><b dir="rtl">د</b></span><span class="key"><small>B</small><b dir="rtl">ز</b></span><span class="key"><small>N</small><b dir="rtl">ر</b></span><span class="key"><small>M</small><b dir="rtl">و</b></span></div></div>
+</div></div>
+  </div>
+</section>
+<section class="section ">
+  <div class="wrap spot">
+    <div class="spot-txt reveal">
+      <p class="kicker">One click away</p><h2>Everything lives in your toolbar</h2><p class="sub">Turn KeyFlip on or off, pause it on a site, swap keyboards and see how much time it saved you.</p>
+      <ul class="ticks"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Pause on any website</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Honest stats: minutes saved, texts fixed</li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Share your progress — only if you want to</li></ul>
+    </div>
+    <div class="spot-media reveal"><figure class="shot popup glow"><img src="assets/img/popup-en.webp" width="760" height="1090" loading="lazy" decoding="async" alt="The KeyFlip toolbar popup: on/off switch, per-site switch, keyboards and time saved."></figure></div>
+  </div>
+</section>
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="head center"><p class="kicker">Everything you need</p><h2>A small tool, thought through</h2></div>
+    <div class="feats"><article class="feat reveal"><span class="feat-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></span><h3>Undo-friendly</h3><p>Every fix goes into the normal undo history. <span class="combo " data-combo="undo" dir="ltr"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>Z</kbd></span> brings the original back.</p></article><article class="feat reveal"><span class="feat-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M9 9v6M7.5 9h3M7.5 15h3M13 12h5"/></svg></span><h3>Works where you type</h3><p>Text boxes, search bars, chats, email, rich editors and embedded frames.</p></article><article class="feat reveal"><span class="feat-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18"/></svg></span><h3>17 keyboards, 9 languages</h3><p>Windows and Mac versions of Arabic, Persian, Urdu, Hebrew, French, German, Russian, Turkish and English.</p></article><article class="feat reveal"><span class="feat-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg></span><h3>Your shortcut, your rules</h3><p>Change the shortcut, hide the floating button or remove the right-click entry.</p></article><article class="feat reveal"><span class="feat-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg></span><h3>Flip back anytime</h3><p>Press the shortcut again and the text switches back.</p></article><article class="feat reveal"><span class="feat-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></span><h3>Read what others typed</h3><p>Got a message in gibberish? Select it and KeyFlip shows it decoded in a card.</p></article><article class="feat reveal"><span class="feat-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/></svg></span><h3>Arabic & English interface</h3><p>A true right-to-left design, with light and dark themes.</p></article><article class="feat reveal"><span class="feat-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><h3>Private by design</h3><p>Your text never leaves your device. No servers, no account, no tracking.</p></article></div>
+  </div>
+</section>
+<section class="section alt">
+  <div class="wrap">
+    <div class="head center"><p class="kicker">15-second tour</p><h2>Watch KeyFlip in action</h2></div>
+    <div class="video reveal">
+      <video controls preload="none" playsinline width="1920" height="1080" poster="assets/video/promo-en.jpg" aria-label="Play the KeyFlip promo video">
+        <source src="assets/video/promo-en.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="wrap">
+    <div class="head center"><p class="kicker">Keyboards</p><h2>Speaks your keyboard</h2></div>
+    <div class="langs"><article class="lang reveal">
+      <span class="glyph" lang="en">A</span>
+      <div><h3><span lang="en" dir="auto">English</span></h3>
+      <p><span class="pill">US</span><span class="pill">UK</span></p></div>
+    </article><article class="lang reveal">
+      <span class="glyph" lang="ar">ض</span>
+      <div><h3><span lang="ar" dir="auto">العربية</span><small>Arabic</small></h3>
+      <p><span class="pill">Windows (101)</span><span class="pill">Mac</span><span class="pill">Mac QWERTY</span></p></div>
+    </article><article class="lang reveal">
+      <span class="glyph" lang="fa">پ</span>
+      <div><h3><span lang="fa" dir="auto">فارسی</span><small>Persian</small></h3>
+      <p><span class="pill">Windows</span><span class="pill">Mac</span></p></div>
+    </article><article class="lang reveal">
+      <span class="glyph" lang="ur">ے</span>
+      <div><h3><span lang="ur" dir="auto">اردو</span><small>Urdu</small></h3>
+      <p><span class="pill">Windows</span></p></div>
+    </article><article class="lang reveal">
+      <span class="glyph" lang="he">א</span>
+      <div><h3><span lang="he" dir="auto">עברית</span><small>Hebrew</small></h3>
+      <p><span class="pill">Windows</span><span class="pill">Mac</span></p></div>
+    </article><article class="lang reveal">
+      <span class="glyph" lang="fr">É</span>
+      <div><h3><span lang="fr" dir="auto">Français</span><small>French</small></h3>
+      <p><span class="pill">AZERTY · Windows</span><span class="pill">AZERTY · Mac</span></p></div>
+    </article><article class="lang reveal">
+      <span class="glyph" lang="de">ß</span>
+      <div><h3><span lang="de" dir="auto">Deutsch</span><small>German</small></h3>
+      <p><span class="pill">QWERTZ · Windows</span><span class="pill">QWERTZ · Mac</span></p></div>
+    </article><article class="lang reveal">
+      <span class="glyph" lang="ru">Ж</span>
+      <div><h3><span lang="ru" dir="auto">Русский</span><small>Russian</small></h3>
+      <p><span class="pill">Windows</span><span class="pill">Mac</span></p></div>
+    </article><article class="lang reveal">
+      <span class="glyph" lang="tr">Ş</span>
+      <div><h3><span lang="tr" dir="auto">Türkçe</span><small>Turkish</small></h3>
+      <p><span class="pill">Q</span></p></div>
+    </article></div>
+  </div>
+</section>
+<section class="section privacy">
+  <div class="wrap priv-in">
+    <div class="priv-badge reveal" aria-hidden="true"><span class="ring r1"></span><span class="ring r2"></span><span class="core"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></div>
+    <div class="reveal">
+      <p class="kicker">Privacy</p><h2>Your words stay yours</h2><p class="sub">KeyFlip runs entirely inside your browser. It reads text only when you ask it to fix something, converts it in memory and forgets it.</p>
+      <ul class="priv-list"><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 2 20 20"/><path d="M8.5 16.4a5 5 0 0 1 7 0M5 12.9a10 10 0 0 1 4.2-2.3M19 12.9a10 10 0 0 0-2.2-1.5M2 8.8a15 15 0 0 1 4.2-2.7M22 8.8A15 15 0 0 0 10.7 5M12 20h.01"/></svg><span>No servers — works offline</span></li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.9 9.9a3 3 0 1 0 4.2 4.2"/><path d="M10.7 5.1A10.4 10.4 0 0 1 12 5c7 0 10 7 10 7a13 13 0 0 1-1.7 2.7M6.6 6.6A13.5 13.5 0 0 0 2 12s3 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="m2 2 20 20"/></svg><span>No analytics, ads or accounts</span></li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 16v-4M12 16V8M17 16v-7"/></svg><span>Stats are just numbers, kept on your device</span></li><li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg><span>This website has no trackers either</span></li></ul>
+      <a class="link" href="privacy/">Read the privacy policy<svg class="ic dir-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+<section class="section" id="install">
+  <div class="wrap">
+    <div class="install card reveal">
+      <p class="kicker">Get KeyFlip</p>
+      <h2>Coming soon to the Chrome Web Store</h2><p class="sub">Want it today? Install the early-access version in under a minute:</p>
+      <ol class="steps"><li><span class="n">1</span><span>Download KeyFlip (ZIP) and unzip it.</span></li><li><span class="n">2</span><span>Open <code>chrome://extensions</code> (in Edge: <code>edge://extensions</code>).</span></li><li><span class="n">3</span><span>Turn on <b>Developer mode</b>.</span></li><li><span class="n">4</span><span>Click <b>Load unpacked</b> and choose the unzipped KeyFlip folder.</span></li></ol>
+      <div class="hero-cta center"><a class="btn primary lg" href="download/keyflip.zip"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></svg>Download KeyFlip (ZIP)</a></div>
+      <p class="browsers center"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg>Chrome · Edge · Brave · Opera — on Windows, Mac, Linux and ChromeOS</p>
+    </div>
+  </div>
+</section>
+<section class="section alt" id="faq">
+  <div class="wrap narrow">
+    <div class="head center"><p class="kicker">Questions</p><h2>Frequently asked</h2></div>
+    <div class="faq"><details class="qa reveal"><summary>Is KeyFlip free?<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>Yes. Completely free, with no ads and no paid version.</p></div></details><details class="qa reveal"><summary>Does it send my text anywhere?<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>No. The conversion happens on your device and nothing is sent anywhere. KeyFlip makes no network requests at all.</p></div></details><details class="qa reveal"><summary>Why does it ask to “read and change data on websites”?<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>That’s how browsers describe any extension that can fix text inside the pages you type in. KeyFlip uses it only when you press the shortcut, click the floating button or use the right-click menu.</p></div></details><details class="qa reveal"><summary>What’s the shortcut on a Mac?<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p><b>⌃ Control + Q</b>, not ⌘ Command + Q — that one quits the browser. You can change the shortcut in the settings.</p></div></details><details class="qa reveal"><summary>Which browsers does it support?<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>Chrome, Microsoft Edge, Brave and Opera, on Windows, Mac, Linux and ChromeOS.</p></div></details><details class="qa reveal"><summary>Where doesn’t it work?<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>Browsers don’t let any extension change their own pages (settings, extension stores, the new-tab page) or the built-in PDF viewer. On those pages the right-click menu opens KeyFlip with the fixed text, ready to copy. Editors that draw text as an image instead of real text boxes can’t be changed either.</p></div></details><details class="qa reveal"><summary>Can I read a message someone typed with the wrong keyboard?<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>Yes. Select it on the page and press the shortcut; KeyFlip shows it decoded in a small card.</p></div></details><details class="qa reveal"><summary>Does it work on phones?<span class="pm" aria-hidden="true"></span></summary><div class="ans"><p>No. KeyFlip is an extension for desktop browsers.</p></div></details></div>
+  </div>
+</section>
+<section class="final">
+  <div class="wrap final-in reveal">
+    <h2>Stop retyping. <span class="grad">Start flipping.</span></h2>
+    <p>Your next wrong-keyboard sentence is one shortcut away from right.</p>
+    <div class="hero-cta center">
+      <a class="btn light lg" href="#install"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></svg>Get early access</a>
+      <a class="btn outline-light lg" href="#try">Try it live</a>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div class="foot-brand"><img src="assets/logo.svg" width="32" height="32" alt=""><div><b>KeyFlip</b><p>Made for everyone who types in more than one language.</p></div></div>
+    <nav class="foot-links" aria-label="Links">
+      <a href="privacy/">Privacy</a>
+      <a href="https://github.com/Devehab/KeyFlip/issues">Support</a>
+      <a href="https://github.com/Devehab/KeyFlip">Source code</a>
+      <a href="#top">Back to top</a>
+    </nav>
+  </div>
+  <p class="wrap foot-copy">© 2026 KeyFlip</p>
+</footer>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"KeyFlip","description":"Typed a whole sentence with the wrong keyboard layout? Select it and press Ctrl+Q. KeyFlip turns ;dt phg; into كيف حالك right where you typed it. Free, private, works offline.","applicationCategory":"BrowserApplication","operatingSystem":"Windows, macOS, Linux, ChromeOS","browserRequirements":"Chrome, Microsoft Edge, Brave or Opera","inLanguage":["en","ar"],"url":"https://devehab.github.io/KeyFlip/","image":"https://devehab.github.io/KeyFlip/assets/logo-512.png","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+<script src="assets/kf/layouts.data.js" defer></script>
+<script src="assets/kf/layouts.js" defer></script>
+<script src="assets/kf/converter.js" defer></script>
+<script src="assets/kf/dictionary.js" defer></script>
+<script src="assets/site.js" defer></script>
 </body>
 </html>
