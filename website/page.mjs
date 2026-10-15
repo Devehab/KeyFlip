@@ -157,8 +157,8 @@ function hero(ctx) {
             <div class="field"><span class="txt" id="demo-text" dir="${first.toDir}">${esc(first.to)}</span><span class="caret"></span></div>
           </div>
           <div class="demo-keys">${combo('flip', 'big')}</div>
-          <div class="toast show" id="demo-toast"><span class="t-ic">${icon('swap')}</span><span id="demo-toast-msg">${esc(ctx.toastFor(first.from))}</span><small>${fill(h.toastUndo)}</small></div>
         </div>
+        <div class="toast show" id="demo-toast" aria-hidden="true"><span class="t-ic">${icon('swap')}</span><span id="demo-toast-msg">${esc(ctx.toastFor(first.from))}</span><small>${fill(h.toastUndo)}</small></div>
       </div>
     </div>
   </div>
