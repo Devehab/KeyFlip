@@ -21,10 +21,17 @@
     whatsapp: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg>',
     linkedin: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.4v1.6c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.2 2.4 4.2 5.4v6.3ZM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2ZM7.1 20.5H3.5V9h3.6v11.5ZM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0Z"/></svg>',
     info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>',
+    star: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.8 2.8 5.7 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 2.9 1.1-6.3-4.6-4.4 6.3-.9L12 2.8Z"/></svg>',
+    share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>',
+    link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>',
+    telegram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.4 3.6 2.9 10.7c-1.3.5-1.2 1.3-.2 1.6l4.7 1.5 1.8 5.6c.2.7.4.9.9.9.4 0 .6-.2.9-.4l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8L22.7 5c.3-1.3-.5-1.9-1.3-1.4ZM9.6 14.2l8.2-5.2c.4-.2.7-.1.4.2l-6.6 6-.3 3.1-1.7-4.1Z"/></svg>',
+    facebook: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7.5h2.5l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5h1.5V4.4c-.3 0-1.2-.1-2.2-.1-2.2 0-3.8 1.4-3.8 3.9v2.3H8v3h2.5V21h3Z"/></svg>',
   };
 
-  // Set once the extension has a public Chrome Web Store page.
-  const STORE_URL = '';
+  // KeyFlip's Chrome Web Store page when this copy came from the store (none
+  // when loaded by hand), found from the extension's own ID.
+  const STORE = KF.store ? KF.store.current() : null;
+  const STORE_URL = STORE ? STORE.page : '';
 
   const $ = (sel, el) => (el || document).querySelector(sel);
   const $$ = (sel, el) => [...(el || document).querySelectorAll(sel)];
@@ -337,6 +344,64 @@
     try { await navigator.clipboard.writeText(text); return true; } catch (e) { return false; }
   }
 
+  // ---------- rating & recommending (copies installed from the Chrome Web Store) ----------
+
+  const Rate = KF.rate;
+
+  function recommendLinks() {
+    const text = t('recommendText');
+    const url = encodeURIComponent(STORE_URL);
+    const both = encodeURIComponent(`${text} ${STORE_URL}`);
+    return [
+      ['whatsapp', 'WhatsApp', `https://wa.me/?text=${both}`],
+      ['telegram', 'Telegram', `https://t.me/share/url?url=${url}&text=${encodeURIComponent(text)}`],
+      ['x', 'X', `https://x.com/intent/post?text=${both}`],
+      ['facebook', 'Facebook', `https://www.facebook.com/sharer/sharer.php?u=${url}`],
+      ['linkedin', 'LinkedIn', `https://www.linkedin.com/sharing/share-offsite/?url=${url}`],
+    ];
+  }
+
+  // Buttons that share KeyFlip's store page. Nothing opens until clicked.
+  function renderShareRow(el) {
+    el.replaceChildren();
+    const label = (node, name, text) => {
+      node.className = 'share-ic';
+      node.dataset.net = name;
+      node.setAttribute('data-icon', name);
+      node.setAttribute('aria-label', text);
+      node.title = text;
+    };
+    for (const [icon, name, href] of recommendLinks()) {
+      const a = document.createElement('a');
+      label(a, icon, name);
+      a.href = href;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      el.append(a);
+    }
+    const b = document.createElement('button');
+    b.type = 'button';
+    label(b, 'link', t('shareCopyLink'));
+    b.addEventListener('click', async () => { if (await copy(STORE_URL)) toast(t('copied')); });
+    el.append(b);
+    hydrateIcons(el);
+  }
+
+  async function rateState() {
+    const got = await chrome.storage.local.get(Rate.KEY);
+    return Rate.sanitize(got[Rate.KEY]);
+  }
+
+  async function setRate(state) {
+    await chrome.storage.local.set({ [Rate.KEY]: state });
+  }
+
+  // Opens the store's review page and remembers that the person went there.
+  async function openReview() {
+    await setRate(Rate.done(await rateState()));
+    await chrome.tabs.create({ url: STORE.review });
+  }
+
   // ---------- quick flip (no page needed) ----------
 
   function quickFlip(text) {
@@ -451,7 +516,8 @@
   }
 
   KF.page = {
-    ICONS, STORE_URL, ctx, $, $$, t, init, save, toast, hydrateIcons, escapeHtml,
+    ICONS, STORE, STORE_URL, ctx, $, $$, t, init, save, toast, hydrateIcons, escapeHtml,
+    renderShareRow, rateState, setRate, openReview,
     bindSwitch, bindSeg, bindPair, fillLayoutSelect, shortcutHtml, selectAllHtml,
     renderKeyboard, renderKpis, renderChart,
     shareText, shareLinks, shareCanvas, downloadShareImage, copy, quickFlip, bindDetector,

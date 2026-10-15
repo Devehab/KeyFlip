@@ -7,9 +7,11 @@ importScripts(
   '../core/stats.js',
   '../core/i18n.js',
   '../core/platform.js',
+  '../core/store.js',
+  '../core/rate.js',
 );
 
-const { settings: Settings, stats: Stats, i18n, shortcut: Shortcut, layouts, platform } = self.KeyFlip;
+const { settings: Settings, stats: Stats, i18n, shortcut: Shortcut, layouts, platform, store: Store, rate: Rate } = self.KeyFlip;
 const MENU_ID = 'keyflip-flip';
 
 // ---------- install / update ----------
@@ -133,11 +135,46 @@ function recordFlip(event) {
   return queue;
 }
 
+// ---------- rating ----------
+
+// Right after a fix, at most once per round of asking (see core/rate.js), the
+// confirmation bubble offers a "Rate KeyFlip" button. Store installs only.
+function rateNudge(stats) {
+  queue = queue.then(async () => {
+    if (!stats || !Store.current()) return false;
+    const cfg = await Settings.load();
+    if (!cfg.showToast) return false;
+    const got = await chrome.storage.local.get(Rate.KEY);
+    if (!Rate.nudge(stats, got[Rate.KEY], Stats.dayKey(Date.now()))) return false;
+    await chrome.storage.local.set({ [Rate.KEY]: Rate.markNudged(got[Rate.KEY]) });
+    return true;
+  }).catch(() => false);
+  return queue;
+}
+
+// Opens KeyFlip's reviews on the Chrome Web Store, next to the current tab.
+async function openReview(tab) {
+  const listing = Store.current();
+  if (!listing) return false;
+  const got = await chrome.storage.local.get(Rate.KEY);
+  await chrome.storage.local.set({ [Rate.KEY]: Rate.done(got[Rate.KEY]) });
+  const opts = { url: listing.review };
+  if (tab && typeof tab.index === 'number') Object.assign(opts, { index: tab.index + 1, openerTabId: tab.id });
+  await chrome.tabs.create(opts);
+  return true;
+}
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (!msg || typeof msg.type !== 'string' || sender.id !== chrome.runtime.id) return undefined;
   if (msg.type === 'keyflip:record') {
-    recordFlip(msg).then((s) => sendResponse({ ok: !!s }));
+    recordFlip(msg)
+      .then(async (s) => ({ ok: !!s, nudge: await rateNudge(s) }))
+      .then(sendResponse);
     return true;
+  }
+  if (msg.type === 'keyflip:rate') {
+    openReview(sender.tab).catch(() => {});
+    return undefined;
   }
   if (msg.type === 'keyflip:openOptions') {
     chrome.runtime.openOptionsPage();
@@ -147,4 +184,4 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 });
 
 // Exposed for tests.
-self.KeyFlipBackground = { rebuildMenu, handleMenuClick, recordFlip, injectIntoOpenTabs, explainBlocked };
+self.KeyFlipBackground = { rebuildMenu, handleMenuClick, recordFlip, injectIntoOpenTabs, explainBlocked, rateNudge, openReview };

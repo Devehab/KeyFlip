@@ -24,11 +24,14 @@ This text is processed in memory on your device, written back into the same text
 KeyFlip stores the following in your browser’s local extension storage (`chrome.storage.local`). It never leaves your device and is not synced:
 - **Settings:** interface language, theme, your two keyboard layouts, shortcut, on/off switches, and the list of websites where you chose to pause KeyFlip.
 - **Usage counters:** number of fixes, number of characters converted, estimated time saved, and per-day totals of these numbers for the last 120 days. **No text and no web addresses are stored in the counters.**
+- **Rating reminder:** whether you rated KeyFlip, chose “Not now” (and after how many fixes and which day to ask again) or “Don’t ask again”.
 
 When you right-click on a page that browsers don’t let extensions edit, the selected text is kept briefly in session memory (`chrome.storage.session`) so the KeyFlip popup can show it flipped. It is deleted as soon as the popup opens, and when the browser closes.
 
-### Sharing
-The optional “Share your progress” buttons open X, WhatsApp or LinkedIn **only when you click them**, with a message you can edit before posting. The share image is drawn on your device. Nothing is posted or sent automatically.
+### Sharing and rating
+The optional share buttons open WhatsApp, Telegram, X, Facebook or LinkedIn **only when you click them**, with a message you can edit before posting. The share image is drawn on your device. Nothing is posted or sent automatically.
+
+After you have used KeyFlip for a while, it may ask whether you would like to rate it. The “Rate KeyFlip” button opens KeyFlip’s page on the Chrome Web Store **only when you click it**. Rating is entirely optional, nothing is offered in return, and no feature depends on it.
 
 ### Permissions and why KeyFlip needs them
 - **Read and change data on websites** (`<all_urls>` content script and host access): so the shortcut, floating button and right-click work in any text box you type in, including embedded editors.
@@ -72,11 +75,14 @@ KeyFlip إضافة للمتصفح تصلح النص المكتوب بلغة ال
 يحفظ KeyFlip في التخزين المحلي للإضافة (`chrome.storage.local`) ما يلي، ولا يغادر جهازك ولا تتم مزامنته:
 - **الإعدادات:** لغة الواجهة، المظهر، تخطيطا الكيبورد، الاختصار، مفاتيح التشغيل، وقائمة المواقع التي اخترت إيقاف KeyFlip عليها.
 - **عدّادات الاستخدام:** عدد مرات التصحيح، عدد الحروف المحوّلة، الوقت الموفّر التقديري، ومجاميعها اليومية لآخر 120 يوماً. **لا يُحفظ أي نص ولا أي عنوان موقع في العدّادات.**
+- **تذكير التقييم:** هل قيّمت KeyFlip، أو اخترت «ليس الآن» (وبعد كم تصحيحاً وفي أي يوم يُسأل مجدداً)، أو «لا تسألني مرة أخرى».
 
 عند الضغط بالزر الأيمن في صفحة لا تسمح المتصفحات للإضافات بتعديلها، يُحفظ النص المظلّل مؤقتاً في ذاكرة الجلسة (`chrome.storage.session`) ليعرضه KeyFlip مقلوباً في نافذة الإضافة، ويُحذف فور فتح النافذة وعند إغلاق المتصفح.
 
-### المشاركة
-أزرار «شارك إنجازك» الاختيارية تفتح X أو واتساب أو لينكدإن **فقط عند الضغط عليها**، مع رسالة يمكنك تعديلها قبل النشر. تُرسم صورة المشاركة على جهازك، ولا يُنشر أو يُرسل أي شيء تلقائياً.
+### المشاركة والتقييم
+أزرار المشاركة الاختيارية تفتح واتساب أو تيليجرام أو X أو فيسبوك أو لينكدإن **فقط عند الضغط عليها**، مع رسالة يمكنك تعديلها قبل النشر. تُرسم صورة المشاركة على جهازك، ولا يُنشر أو يُرسل أي شيء تلقائياً.
+
+بعد فترة من استخدام KeyFlip قد يسألك إن كنت تود تقييمه. زر «قيّم KeyFlip» يفتح صفحة KeyFlip في متجر Chrome الإلكتروني **فقط عند الضغط عليه**. التقييم اختياري تماماً، لا يُقدَّم مقابله أي شيء، ولا تعتمد عليه أي ميزة.
 
 ### الصلاحيات ولماذا يحتاجها
 - **قراءة وتغيير البيانات على المواقع:** ليعمل الاختصار والزر العائم والزر الأيمن في أي مربع كتابة، بما فيها المحررات المضمّنة.

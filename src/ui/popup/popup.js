@@ -39,7 +39,39 @@
     P.bindPair($('#layout-a'), $('#layout-b'), $('#swap'), null, true);
 
     P.renderKpis($('#kpis'), stats);
+    renderRate(ctx);
     updateQuick();
+  }
+
+  // The rating card: only for copies from the Chrome Web Store, and only once
+  // KeyFlip has really been used (see core/rate.js).
+  async function renderRate(ctx) {
+    const card = $('#rate');
+    if (!P.STORE) { card.hidden = true; return; }
+    const due = KF.rate.due(ctx.stats, await P.rateState(), KF.stats.dayKey(Date.now()));
+    card.hidden = !due;
+    if (due) $('#rate-body').textContent = t('rateBody', { n: ctx.stats.flips, store: t('storeChrome') });
+  }
+
+  function bindRate() {
+    const row = $('#rate-share-row');
+    $('#rate-go').addEventListener('click', async () => {
+      await P.openReview();
+      window.close();
+    });
+    $('#rate-share').addEventListener('click', () => {
+      if (!row.childElementCount) P.renderShareRow(row);
+      row.hidden = !row.hidden;
+      $('#rate-share').setAttribute('aria-expanded', String(!row.hidden));
+    });
+    $('#rate-later').addEventListener('click', async () => {
+      await P.setRate(KF.rate.later(P.ctx.stats, await P.rateState(), KF.stats.dayKey(Date.now())));
+      $('#rate').hidden = true;
+    });
+    $('#rate-never').addEventListener('click', async () => {
+      await P.setRate(KF.rate.never(await P.rateState()));
+      $('#rate').hidden = true;
+    });
   }
 
   function updateQuick() {
@@ -70,6 +102,7 @@
     P.bindAccessBanner($('#access-banner'));
     if (!host) $('#quick').open = true;
     showPending();
+    bindRate();
 
     $('#site-enabled').addEventListener('change', async (e) => {
       const list = P.ctx.cfg.disabledSites.filter((h) => h !== host);

@@ -55,6 +55,20 @@
       </div>
     </section>
 
+    <section class="card rate" id="rate" hidden>
+      <div class="rate-head">
+        <span class="rate-ic" data-icon="star"></span>
+        <div><b data-i18n="rateTitle"></b><p id="rate-body"></p></div>
+      </div>
+      <div class="rate-actions">
+        <button class="btn btn-primary btn-sm" type="button" id="rate-go" data-icon="star"><span data-i18n="rateButton"></span></button>
+        <button class="btn btn-secondary btn-sm" type="button" id="rate-share" data-icon="share" aria-expanded="false" aria-controls="rate-share-row"><span data-i18n="recommendTitle"></span></button>
+        <button class="btn btn-ghost btn-sm" type="button" id="rate-later" data-i18n="rateLater"></button>
+      </div>
+      <div class="share-row" id="rate-share-row" hidden></div>
+      <button class="link-btn" type="button" id="rate-never" data-i18n="rateNever"></button>
+    </section>
+
     <section class="card card-pad block">
       <h3 class="label" data-i18n="popupKeyboards"></h3>
       <div class="pair">
@@ -100,6 +114,8 @@
   <script src="../../core/stats.js"></script>
   <script src="../../core/i18n.js"></script>
   <script src="../../core/platform.js"></script>
+  <script src="../../core/store.js"></script>
+  <script src="../../core/rate.js"></script>
   <script src="../shared/common.js"></script>
   <script src="popup.js"></script>
 </body>

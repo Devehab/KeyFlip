@@ -26,6 +26,7 @@ const REPO = 'https://github.com/Devehab/KeyFlip';
 // `npm run docs`: every "Get KeyFlip" button switches to the store.
 const STORE_URL = '';
 
+const { version: VERSION } = JSON.parse(readFileSync(join(root, 'manifest.json'), 'utf8'));
 const converter = require('../src/core/converter.js');
 const layouts = require('../src/core/layouts.js');
 const dictionary = require('../src/core/dictionary.js');
@@ -140,9 +141,8 @@ function copyAssets() {
   // Early-access download: the same ZIP that goes to the store.
   if (!STORE_URL) {
     execFileSync(process.execPath, [join(root, 'scripts/package.mjs')], { stdio: 'ignore' });
-    const { version } = JSON.parse(readFileSync(join(root, 'manifest.json'), 'utf8'));
     mkdirSync(join(out, 'download'), { recursive: true });
-    copyFileSync(join(root, 'dist', `keyflip-${version}.zip`), join(out, 'download', 'keyflip.zip'));
+    copyFileSync(join(root, 'dist', `keyflip-${VERSION}.zip`), join(out, 'download', 'keyflip.zip'));
   }
 }
 
@@ -216,6 +216,8 @@ function context(lang, rootPath) {
     glyphs: GLYPHS,
     variant: (it) => VARIANTS[it.id][lang === 'ar' ? 1 : 0],
     layoutName: (id) => layouts.name(id, lang, true),
+    version: VERSION,
+    builtOn: new Intl.DateTimeFormat(lang === 'ar' ? 'ar-u-nu-latn' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date()),
   };
 }
 

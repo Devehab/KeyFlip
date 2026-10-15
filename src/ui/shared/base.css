@@ -51,6 +51,10 @@
   --r-xl: 28px;
   --key-top: #ffffff;
   --key-side: #dcd7f0;
+  --switch-off: #d6d3e4;
+  --switch-off-hover: #c9c5dc;
+  --star: #f2a000;
+  --star-soft: #fff3cf;
 }
 
 :root[data-theme="dark"] {
@@ -79,6 +83,10 @@
   --shadow-lg: 0 30px 60px -20px rgba(0, 0, 0, .7), 0 8px 20px rgba(0, 0, 0, .35);
   --key-top: #2a2748;
   --key-side: #121024;
+  --switch-off: #3a3758;
+  --switch-off-hover: #46426a;
+  --star: #ffc845;
+  --star-soft: rgba(255, 200, 69, .14);
 }
 
 * { box-sizing: border-box; }
@@ -139,20 +147,47 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .icon-btn svg { width: 19px; height: 19px; }
 
 /* ---------- switch ---------- */
-.switch { position: relative; display: inline-block; width: 44px; height: 26px; flex: none; }
-.switch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; z-index: 1; }
+/* A plain, solid switch: grey when off, brand colour when on. The knob moves
+   with a transform, mirrored for right-to-left pages. */
+.switch { --sw-w: 42px; --sw-h: 24px; --sw-k: 20px; position: relative; display: inline-block; width: var(--sw-w); height: var(--sw-h); flex: none; vertical-align: middle; }
+.switch-sm { --sw-w: 34px; --sw-h: 20px; --sw-k: 16px; }
+.switch input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; margin: 0; cursor: pointer; z-index: 1; }
 .switch span {
-  position: absolute; inset: 0; border-radius: 999px; background: var(--surface-3);
-  border: 1px solid var(--line-strong); transition: background .2s ease, border-color .2s ease;
+  position: absolute; inset: 0; border-radius: 999px; background: var(--switch-off);
+  transition: background-color .2s ease;
 }
 .switch span::after {
-  content: ""; position: absolute; top: 2px; inset-inline-start: 2px; width: 20px; height: 20px;
-  border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
-  transition: inset-inline-start .2s cubic-bezier(.3, 1.3, .5, 1);
+  content: ""; position: absolute; top: calc((var(--sw-h) - var(--sw-k)) / 2); left: calc((var(--sw-h) - var(--sw-k)) / 2);
+  width: var(--sw-k); height: var(--sw-k); border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 3px rgba(16, 12, 40, .28), 0 0 0 .5px rgba(16, 12, 40, .08);
+  transition: transform .22s cubic-bezier(.3, .7, .4, 1);
 }
-.switch input:checked + span { background: var(--grad); border-color: transparent; }
-.switch input:checked + span::after { inset-inline-start: 20px; }
+.switch input:hover + span { background: var(--switch-off-hover); }
+.switch input:checked + span { background: var(--accent); }
+.switch input:checked:hover + span { background: var(--accent-ink); }
+.switch input:checked + span::after { transform: translateX(calc(var(--sw-w) - var(--sw-h))); }
+[dir="rtl"] .switch span::after { left: auto; right: calc((var(--sw-h) - var(--sw-k)) / 2); }
+[dir="rtl"] .switch input:checked + span::after { transform: translateX(calc(var(--sw-h) - var(--sw-w))); }
 .switch input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.switch input:disabled { cursor: not-allowed; }
+.switch input:disabled + span { opacity: .45; }
+
+/* ---------- share buttons & text links ---------- */
+.share-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.share-ic {
+  display: inline-grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; padding: 0;
+  border: 1px solid var(--line-strong); background: var(--surface); color: var(--text); cursor: pointer;
+  transition: border-color .15s ease, color .15s ease, transform .12s ease;
+}
+.share-ic:hover { border-color: currentColor; transform: translateY(-1px); }
+.share-ic svg { width: 18px; height: 18px; }
+.share-ic[data-net="whatsapp"]:hover { color: #1fae53; }
+.share-ic[data-net="telegram"]:hover { color: #229ed9; }
+.share-ic[data-net="facebook"]:hover { color: #1877f2; }
+.share-ic[data-net="linkedin"]:hover { color: #0a66c2; }
+.share-ic[data-net="x"]:hover, .share-ic[data-net="link"]:hover { color: var(--accent-ink); }
+.link-btn { border: 0; background: none; padding: 2px 0; color: var(--muted); font-size: 12px; font-weight: 500; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.link-btn:hover { color: var(--text); }
 
 /* ---------- segmented control ---------- */
 .seg { display: inline-flex; padding: 3px; gap: 2px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; }
@@ -221,7 +256,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 
 /* ---------- layout pair ---------- */
-.pair { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: end; }
+.pair { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 10px; align-items: end; }
 .pair label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
 .swap {
   width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface);
@@ -252,7 +287,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .kb-legend i.b { background: var(--accent-ink); }
 
 /* ---------- stats ---------- */
-.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .kpi { padding: 14px; border-radius: 16px; background: var(--surface-2); border: 1px solid var(--line); min-width: 0; }
 .kpi b { display: block; font-size: 24px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; font-variant-numeric: tabular-nums; }
 .kpi span { display: block; color: var(--muted); font-size: 12px; margin-top: 4px; }

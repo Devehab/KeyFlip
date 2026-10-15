@@ -313,7 +313,9 @@ function install(ctx) {
       <div class="hero-cta center"><a class="btn primary lg" href="${ctx.storeUrl}">${icon('download')}${COPY[ctx.lang].cta.store}</a></div>`
     : `<h2>${t.titleSoon}</h2><p class="sub">${t.bodySoon}</p>
       <ol class="steps">${t.steps.map((s, i) => `<li><span class="n">${i + 1}</span><span>${s}</span></li>`).join('')}</ol>
-      <div class="hero-cta center"><a class="btn primary lg" href="${ctx.zipUrl}">${icon('download')}${t.download}</a></div>`;
+      <div class="hero-cta center"><a class="btn primary lg" href="${ctx.zipUrl}" download>${icon('download')}${t.download}</a></div>
+      <p class="ver">${t.version.replace('{version}', `<bdi>${esc(ctx.version)}</bdi>`).replace('{date}', esc(ctx.builtOn))}</p>
+      <p class="ver-note">${t.note}</p>`;
   return `<section class="section" id="install">
   <div class="wrap">
     <div class="install card reveal">

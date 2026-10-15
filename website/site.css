@@ -332,6 +332,8 @@ textarea.flash { animation: flash .6s ease; }
 .steps li { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 16px; background: var(--card-2); border: 1px solid var(--line); }
 .steps .n { flex: none; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 10px; background: var(--grad); color: #fff; font-weight: 800; }
 .install .browsers { margin-top: 26px; }
+.install .ver { margin-top: 14px; color: var(--muted); font-weight: 700; font-size: .92rem; }
+.install .ver-note { margin-top: 4px; color: var(--faint); font-size: .88rem; }
 
 /* faq */
 .faq { display: grid; gap: 12px; }

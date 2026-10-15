@@ -38,7 +38,8 @@ You can also:
 - **Smart لا handling:** on Windows the B key types “لا”, which is also G + H. KeyFlip uses an English word list to pick the right one and asks you only when it’s unsure.
 - **Capital letters, hamza positions (أ إ آ), dead keys (ê, ü),** and presentation-form ligatures are all handled.
 - **Works with real web apps:** text boxes, rich editors (contenteditable) and iframes. It keeps undo history and fires the events frameworks listen for.
-- **Stats & achievements:** texts rescued, characters not retyped, minutes saved, streaks, plus a shareable card.
+- **Honest stats:** texts fixed, characters not retyped and minutes saved, plus a shareable card.
+- **A polite rating request:** only for copies installed from the Chrome Web Store, only after real use (20 fixes over 3 days), at most three times, never in exchange for anything. “Rate KeyFlip” opens the store’s reviews; “Share” offers WhatsApp, Telegram, X, Facebook, LinkedIn or a link. The store link is found automatically from the extension’s ID.
 - **Arabic and English interface** (RTL), light and dark themes.
 - **Private by design:** no network requests, no analytics. Text is processed on your device only.
 
@@ -110,6 +111,7 @@ Every push runs lint, store-policy validation, 53 unit tests and 44 end-to-end t
 - **اختيار التخطيط بدقة:** الإنجليزية (US) ⇄ العربية (101)، أو العربية على ماك، الفارسية، الأردية، العبرية، الفرنسية، الألمانية، الروسية، التركية. يكتشف KeyFlip نظام التشغيل ويقترح التخطيط المناسب.
 - **معالجة ذكية لـ «لا»:** يحدد إذا كانت B أو G+H باستخدام قاموس، ويسألك فقط عند الشك.
 - **الحروف الكبيرة والهمزات (أ إ آ)** والحروف المركّبة.
-- **إحصائيات وإنجازات** مع بطاقة جاهزة للمشاركة.
+- **إحصائيات صادقة:** نصوص مصحّحة، حروف لم تُعِد كتابتها ودقائق موفّرة، مع بطاقة جاهزة للمشاركة.
+- **طلب تقييم لطيف:** للنسخ المثبّتة من متجر Chrome فقط، وبعد استخدام حقيقي (20 تصحيحاً خلال 3 أيام)، 3 مرات كحد أقصى وبدون أي مقابل. زر «قيّم KeyFlip» يفتح التقييمات في المتجر، وزر «شارك» يشارك رابط المتجر. الإضافة تعرف رابطها في المتجر تلقائياً.
 - **واجهة عربية وإنجليزية** مع وضع فاتح وداكن.
 - **خصوصية كاملة:** بدون إنترنت وبدون تحليلات، والنص يُعالَج على جهازك فقط.

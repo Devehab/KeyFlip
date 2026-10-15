@@ -5,6 +5,7 @@
   const KF = root.KeyFlip;
 
   const ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h11l-3.2-3.2M17 17H6l3.2 3.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="m12 2.8 2.8 5.7 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 2.9 1.1-6.3-4.6-4.4 6.3-.9L12 2.8Z"/></svg>';
 
   const CSS = `
 :host { all: initial; }
@@ -42,6 +43,11 @@ svg { width: 16px; height: 16px; flex: none; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 .toast .ic { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 8px; background: var(--grad); }
 .toast small { color: #b9b5d6; font-weight: 500; margin-inline-start: 4px; }
+.toast .act { pointer-events: auto; display: inline-flex; align-items: center; gap: 6px; height: 28px; margin-inline-start: 6px; padding: 0 11px;
+  border: 0; border-radius: 9px; background: #fff; color: #17152b; font: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer; }
+.toast .act:hover { background: #efebff; }
+.toast:not(.show) .act { pointer-events: none; }
+.toast .act svg { width: 14px; height: 14px; color: #f2a000; }
 
 .overlay { position: fixed; inset: 0; width: 100vw; height: 100vh; display: grid; place-items: center; padding: 16px;
   background: rgba(16, 12, 40, .38); backdrop-filter: blur(6px); animation: fade .16s ease; }
@@ -194,7 +200,16 @@ svg { width: 16px; height: 16px; flex: none; }
       return !!fab && fab.classList.contains('show');
     }
 
-    function toast(message, sub) {
+    // A hidden bubble keeps no clickable button behind.
+    function hideToast() {
+      if (!toastEl) return;
+      toastEl.classList.remove('show');
+      const act = toastEl.querySelector('.act');
+      if (act) act.remove();
+    }
+
+    // `action` ({ label, onClick }) adds one button and keeps the bubble longer.
+    function toast(message, sub, action) {
       ensure();
       if (!toastEl) {
         toastEl = el('div', 'toast');
@@ -209,9 +224,21 @@ svg { width: 16px; height: 16px; flex: none; }
         s.textContent = sub;
         toastEl.lastChild.append(s);
       }
+      if (action) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'act';
+        b.innerHTML = STAR;
+        b.append(action.label);
+        b.addEventListener('click', () => {
+          hideToast();
+          action.onClick();
+        });
+        toastEl.append(b);
+      }
       clearTimeout(toastTimer);
       requestAnimationFrame(() => toastEl.classList.add('show'));
-      toastTimer = setTimeout(() => toastEl && toastEl.classList.remove('show'), 2400);
+      toastTimer = setTimeout(hideToast, action ? 7000 : 2400);
     }
 
     function closeCard() {

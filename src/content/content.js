@@ -248,10 +248,17 @@
     return { x: rtl ? rect.left : rect.right, y: (rects[0] || rect).top, bottom: rect.bottom, align: 'center' };
   }
 
+  // Counts the fix. The answer may ask for the one-time "Rate KeyFlip" button.
   function record(chars, solved) {
     try {
-      chrome.runtime.sendMessage({ type: 'keyflip:record', chars, ambiguities: solved || 0 }).catch(() => {});
-    } catch (e) { /* extension reloaded */ }
+      return chrome.runtime.sendMessage({ type: 'keyflip:record', chars, ambiguities: solved || 0 }).catch(() => null);
+    } catch (e) {
+      return Promise.resolve(null); // extension reloaded
+    }
+  }
+
+  function rate() {
+    try { chrome.runtime.sendMessage({ type: 'keyflip:rate' }).catch(() => {}); } catch (e) { /* reloaded */ }
   }
 
   async function flip(source) {
@@ -288,8 +295,15 @@
     if (t.kind === 'field') writeField(t, out); else writeEditable(t, out);
     last = { text: out, direction: result.direction, at: Date.now() };
     const n = graphemes(out);
-    record(n, resolved.solved);
-    if (cfg.showToast) ui.toast(i18n.t(lang, 'toastFlipped', { n }), i18n.t(lang, 'toastUndo', { undo: Shortcut.undo(OS) }));
+    const recorded = record(n, resolved.solved);
+    if (cfg.showToast) {
+      const message = i18n.t(lang, 'toastFlipped', { n });
+      const sub = i18n.t(lang, 'toastUndo', { undo: Shortcut.undo(OS) });
+      ui.toast(message, sub);
+      recorded.then((res) => {
+        if (res && res.nudge && !destroyed) ui.toast(message, sub, { label: i18n.t(lang, 'rateButton'), onClick: rate });
+      });
+    }
     return true;
   }
 

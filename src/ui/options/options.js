@@ -130,10 +130,24 @@
     });
   }
 
+  // Rate / share, always available here (no reminder), for store installs.
+  function setupRate() {
+    if (!P.STORE) return;
+    const row = $('#about-share-row');
+    $('#rate-row').hidden = false;
+    $('#about-rate').addEventListener('click', () => P.openReview());
+    $('#about-share').addEventListener('click', () => {
+      if (!row.childElementCount) P.renderShareRow(row);
+      row.hidden = !row.hidden;
+      $('#about-share').setAttribute('aria-expanded', String(!row.hidden));
+    });
+  }
+
   async function main() {
     $('#shift').addEventListener('change', () => renderKeyboards(P.ctx));
     await P.init(render);
     P.bindAccessBanner($('#access-banner'));
+    setupRate();
     setupNav();
     setupRecorder();
     P.bindDetector($('#detect-input'), $('#detect-result'), $('#detect-use'));

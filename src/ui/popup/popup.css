@@ -1,31 +1,40 @@
 body { width: 380px; min-height: 200px; background: var(--bg-glow), var(--bg); }
-.popup { display: grid; gap: 12px; padding: 14px; }
+.popup { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 14px; }
+.popup > *, .hero > *, .block > *, .quick-body > * { min-width: 0; }
 .top { display: flex; align-items: center; gap: 8px; }
 .top .brand img { width: 38px; height: 38px; }
 .top .brand small { max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .seg-lang button { height: 28px; padding: 0 10px; font-size: 12.5px; }
 .seg-lang button[data-value="ar"] { font-size: 14px; }
 
-.hero { padding: 16px; display: grid; gap: 12px; background: var(--surface); position: relative; overflow: hidden; }
+.hero { padding: 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; background: var(--surface); position: relative; overflow: hidden; }
 .hero::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: var(--grad); }
 .hero.off::before { background: var(--surface-3); }
 .hero-row { display: flex; align-items: center; gap: 12px; }
 .hero-row .txt { flex: 1; min-width: 0; }
 .hero-row .txt b { display: block; font-size: 15.5px; font-weight: 700; }
-.hero-row .txt span { display: block; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hero-row .txt span { display: block; font-size: 12.5px; line-height: 1.45; overflow-wrap: anywhere; }
 .hero-row.site { padding: 10px 12px; border-radius: 12px; background: var(--surface-2); font-size: 13px; justify-content: space-between; }
-.switch-sm { width: 38px; height: 22px; }
-.switch-sm span::after { width: 16px; height: 16px; }
-.switch-sm input:checked + span::after { inset-inline-start: 18px; }
 .howto { display: grid; gap: 4px; padding: 10px 12px; border-radius: 12px; background: var(--grad-soft); font-size: 13px; font-weight: 500; }
 .howto-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .howto .or { color: var(--muted); font-size: 12px; font-weight: 400; }
 .howto .kbd { height: 26px; min-width: 26px; font-size: 11.5px; }
 
-.block { padding: 14px 16px; display: grid; gap: 10px; }
+.rate { padding: 14px 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px;
+  background: linear-gradient(180deg, var(--accent-soft), transparent 75%), var(--surface); }
+.rate-head { display: flex; gap: 12px; align-items: flex-start; }
+.rate-head b { display: block; font-size: 14.5px; font-weight: 700; }
+.rate-head p { margin: 3px 0 0; font-size: 12.5px; line-height: 1.6; color: var(--muted); }
+.rate-ic { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px; background: var(--star-soft); color: var(--star); }
+.rate-ic svg { width: 20px; height: 20px; }
+.rate-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.rate-actions .btn svg { width: 15px; height: 15px; }
+.rate .link-btn { justify-self: start; }
+
+.block { padding: 14px 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
 .label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
 :root[lang="ar"] .label { text-transform: none; letter-spacing: 0; font-size: 13px; }
-.pair { grid-template-columns: 1fr 40px 1fr; gap: 8px; align-items: center; }
+.pair { grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr); gap: 8px; align-items: center; }
 .pair .select select { height: 40px; font-size: 12.5px; padding-inline: 10px 28px; }
 .pair .select::after { inset-inline-end: 11px; width: 6px; height: 6px; }
 .swap { width: 40px; height: 40px; }
@@ -41,7 +50,7 @@ body { width: 380px; min-height: 200px; background: var(--bg-glow), var(--bg); }
 .quick[open] summary::after { transform: rotate(-135deg); }
 .quick .ic { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; background: var(--grad); color: #fff; }
 .quick .ic svg { width: 15px; height: 15px; }
-.quick-body { display: grid; gap: 10px; padding: 0 16px 16px; }
+.quick-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 0 16px 16px; }
 .quick-out { display: flex; align-items: flex-start; gap: 8px; padding: 12px; border-radius: 12px; background: var(--surface-2); min-height: 48px; }
 .quick-out p { flex: 1; font-size: 15px; unicode-bidi: plaintext; overflow-wrap: anywhere; }
 .quick-out p.has { color: var(--text); font-weight: 500; }

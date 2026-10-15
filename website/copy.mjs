@@ -121,6 +121,8 @@ export const COPY = {
         'Click <b>Load unpacked</b> and choose the unzipped KeyFlip folder.',
       ],
       download: 'Download KeyFlip (ZIP)',
+      version: 'Version {version} · updated {date}',
+      note: 'Early-access copies don’t update by themselves: download again to get the latest version.',
       browsers: 'Chrome · Edge · Brave · Opera — on Windows, Mac, Linux and ChromeOS',
     },
     faq: {
@@ -262,6 +264,8 @@ export const COPY = {
         'اضغط <b>تحميل إضافة غير مضغوطة</b> <span class="nw">(Load unpacked)</span> ثم اختر مجلد KeyFlip.',
       ],
       download: 'نزّل KeyFlip (ZIP)',
+      version: 'الإصدار {version} · آخر تحديث {date}',
+      note: 'النسخة المبكرة لا تتحدّث تلقائياً: نزّلها من جديد لتحصل على آخر إصدار.',
       browsers: 'Chrome · Edge · Brave · Opera — على ويندوز وماك ولينكس وكروم أو إس',
     },
     faq: {
